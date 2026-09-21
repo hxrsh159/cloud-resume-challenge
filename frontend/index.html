@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Harsh — Cloud & DevOps Engineer. Resume hosted on a fully automated serverless GCP architecture." />
+  <title>Harsh | Cloud & DevOps Engineer</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1>Harsh</h1>
+      <p class="tagline">Cloud &amp; DevOps Engineer</p>
+      <nav aria-label="Contact">
+        <ul class="contact-list">
+          <li><a href="mailto:you@example.com">you@example.com</a></li>
+          <li><a href="https://github.com/yourusername" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener">LinkedIn</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="summary" aria-labelledby="summary-heading">
+      <h2 id="summary-heading">Summary</h2>
+      <p>
+        Cloud engineer focused on serverless architectures, infrastructure as code,
+        and zero-trust CI/CD. This very site is served from a global HTTPS load
+        balancer with Cloud CDN, backed by a Rust API on Cloud Run — all deployed
+        keylessly via Workload Identity Federation.
+      </p>
+    </section>
+
+    <section id="experience" aria-labelledby="experience-heading">
+      <h2 id="experience-heading">Experience</h2>
+      <article class="job">
+        <h3>Job Title <span class="org">— Company Name</span></h3>
+        <p class="date-range">Mon 20XX – Present</p>
+        <ul>
+          <li>Accomplishment with a measurable result (e.g. cut deploy time 60%).</li>
+          <li>Accomplishment with a measurable result.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section id="skills" aria-labelledby="skills-heading">
+      <h2 id="skills-heading">Skills</h2>
+      <ul class="skills-grid">
+        <li>GCP (Cloud Run, GCS, Cloud CDN, Firestore)</li>
+        <li>Terraform / IaC</li>
+        <li>Rust</li>
+        <li>Docker &amp; distroless images</li>
+        <li>GitHub Actions / Workload Identity Federation</li>
+        <li>Linux &amp; Networking</li>
+      </ul>
+    </section>
+
+    <section id="certifications" aria-labelledby="certifications-heading">
+      <h2 id="certifications-heading">Certifications</h2>
+      <ul>
+        <li>Google Cloud Professional Cloud Architect (in progress)</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Visitor count: <span id="visitor-counter">—</span></p>
+    </div>
+  </footer>
+
+  <script src="counter.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+# Terraform — never commit state (may contain sensitive values)
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/tfplan
+.terraform.lock.hcl
+
+# Firebase CLI cache
+.firebase/
+
+# Node (firebase-tools via npx caches elsewhere, but guard anyway)
+node_modules/
+
+# OS / editor
+.DS_Store
+*.swp
