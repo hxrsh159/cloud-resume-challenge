@@ -25,7 +25,9 @@ async fn get_visitors(State(store): State<SharedStore>) -> impl IntoResponse {
     }
 }
 
-async fn healthz() -> &'static str {
+// NOTE: /healthz is unreachable on Cloud Run — Google's front end reserves
+// that path and answers it before the container sees the request.
+async fn health() -> &'static str {
     "ok"
 }
 
@@ -55,7 +57,7 @@ async fn main() -> anyhow::Result<()> {
 
     let app = Router::new()
         .route("/api/visitors", get(get_visitors))
-        .route("/healthz", get(healthz))
+        .route("/health", get(health))
         .layer(cors)
         .with_state(store);
 

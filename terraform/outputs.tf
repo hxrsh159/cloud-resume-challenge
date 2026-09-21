@@ -13,6 +13,11 @@ output "dns_records_to_create" {
   value       = try(google_firebase_hosting_custom_domain.apex.required_dns_updates, null)
 }
 
+output "cloud_run_url" {
+  description = "Public URL of the visitor counter API. Referenced by frontend/counter.js."
+  value       = google_cloud_run_v2_service.api.uri
+}
+
 output "deploy_hint" {
   description = "Command to publish the frontend/ directory (Phase 4 automates this in GitHub Actions)."
   value       = "firebase deploy --only hosting"
