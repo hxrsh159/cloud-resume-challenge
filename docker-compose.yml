@@ -1,0 +1,32 @@
+# Phase 5: local integration stack — the API against a real Datastore
+# emulator, zero GCP credentials required.
+#
+#   docker compose up --build        # or: podman compose up --build
+#   curl http://localhost:8081/api/visitors
+#
+# How it works: DATASTORE_EMULATOR_HOST switches DatastoreStore to plain
+# HTTP against the emulator with auth disabled (see backend/src/store.rs).
+# The emulator is in-memory (--no-store-on-disk): every `up` starts the
+# counter at 1. Entity data never touches your GCP project.
+
+services:
+  datastore-emulator:
+    image: gcr.io/google.com/cloudsdktool/google-cloud-cli:emulators
+    command: >
+      gcloud beta emulators datastore start
+      --host-port=0.0.0.0:8085
+      --project=cloud-resume-challenge-509306
+      --no-store-on-disk
+    ports:
+      - "8085:8085"
+
+  api:
+    build: ./backend
+    environment:
+      GCP_PROJECT_ID: cloud-resume-challenge-509306
+      DATASTORE_EMULATOR_HOST: datastore-emulator:8085
+      PORT: "8080"
+    ports:
+      - "8081:8080"
+    depends_on:
+      - datastore-emulator
