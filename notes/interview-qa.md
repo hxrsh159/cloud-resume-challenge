@@ -128,11 +128,38 @@ image (Artifact Registry pennies), Firestore free tier — plus a billing
 budget with threshold alerts as the guardrail, because "should be free"
 is not a control.
 
-## STAR bullet seeds (expand in Phase 6)
+## STAR bullets (final, Phase 6 — Cloud/DevOps Engineer resume)
 
-- Built zero-cost serverless resume platform on GCP (Firebase Hosting CDN,
-  Cloud Run, Firestore) with 100% Terraform-managed infrastructure.
-- Implemented keyless CI/CD with Workload Identity Federation, eliminating
-  long-lived credentials from the pipeline.
-- Engineered atomic visitor counter in Rust with distroless container
-  (<10 MB image) on scale-to-zero Cloud Run.
+**Serverless platform engineering.** *Situation:* personal resume site with
+a live dynamic component, no budget for always-on infrastructure.
+*Task:* deliver production-grade hosting + API at ~$0/month without cutting
+corners on reliability. *Action:* built a Rust (axum) counter API deployed
+as a 9 MB distroless container on scale-to-zero Cloud Run, with the static
+site on a global edge CDN with managed TLS — after rejecting a load-balancer
+design that carried $18/month in fixed cost. *Result:* ~$0/month steady
+state with atomic, transaction-safe counter writes in Firestore (Datastore
+mode), verified by concurrency tests; platform absorbs traffic spikes at
+zero idle cost.
+
+**Zero-trust CI/CD.** *Situation:* typical GCP pipelines authenticate with
+service-account JSON keys — long-lived secrets that leak and need rotation.
+*Task:* eliminate stored credentials from the delivery pipeline entirely.
+*Action:* implemented Workload Identity Federation — a repo-scoped OIDC
+trust lets GitHub Actions exchange 5-minute tokens for a least-privilege CI
+identity; separated CI and runtime service accounts so the runtime holds
+exactly one role (datastore.user). *Result:* keyless pipelines for both
+frontend and backend where failing tests, image digest pinning, and
+Terraform remote state make every deploy reproducible and every revision
+rollback-able — with nothing to leak or rotate.
+
+**Infrastructure as Code with verification culture.** *Situation:* the
+whole platform — CDN, database, container runtime, identity federation —
+must be rebuildable and reviewable. *Task:* manage everything in Terraform
+while keeping quality gates real, not aspirational. *Action:* wrote the
+full stack as Terraform with a versioned remote-state backend, added
+mock-based unit tests (including a 50-way concurrency proof for the counter)
+and a Docker Compose + Datastore emulator stack for credential-free local
+integration testing, gated CI deploys on `cargo test`. *Result:* a
+commit-per-phase history where `terraform apply` reproduces the entire
+platform and no code reaches production without passing tests — practices
+documented as ADRs for team adoption.
