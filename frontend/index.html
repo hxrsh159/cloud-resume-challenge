@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Harsh — Cloud & DevOps Engineer. Resume hosted on a fully automated serverless GCP architecture." />
-  <title>Harsh | Cloud & DevOps Engineer</title>
+  <meta name="description" content="Harshit Singh — Software Engineer in Melbourne. Production software since 2017 across ERP, retail, logistics and digital signage." />
+  <title>Harshit Singh | Software Engineer</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header class="site-header">
     <div class="container">
-      <h1>Harsh</h1>
-      <p class="tagline">Cloud &amp; DevOps Engineer</p>
+      <h1>Harshit Singh</h1>
+      <p class="tagline">Software Engineer — Melbourne, Australia</p>
       <nav aria-label="Contact">
         <ul class="contact-list">
-          <li><a href="mailto:you@example.com">you@example.com</a></li>
-          <li><a href="https://github.com/yourusername" target="_blank" rel="noopener">GitHub</a></li>
-          <li><a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="mailto:ausharshitsingh@gmail.com">ausharshitsingh@gmail.com</a></li>
+          <li><a href="https://www.linkedin.com/in/harsh159/" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="https://github.com/hxrsh159" target="_blank" rel="noopener">GitHub</a></li>
         </ul>
       </nav>
     </div>
@@ -26,41 +26,110 @@
     <section id="summary" aria-labelledby="summary-heading">
       <h2 id="summary-heading">Summary</h2>
       <p>
-        Cloud engineer focused on serverless architectures, infrastructure as code,
-        and zero-trust CI/CD. This very site is served from a global HTTPS load
-        balancer with Cloud CDN, backed by a Rust API on Cloud Run — all deployed
-        keylessly via Workload Identity Federation.
+        I build and support production software, and have done so since 2017 —
+        across enterprise ERP, retail loyalty, transport logistics and digital
+        signage. My day-to-day toolkit is C#/.NET, Rust, TypeScript, PHP and SQL,
+        with cloud and event-driven systems on top: Azure Blob Storage, NATS
+        JetStream, PostgreSQL and CI/CD with GitHub Actions and Docker.
+      </p>
+      <p>
+        I am strongest where software meets operations: diagnosing production
+        issues, automating deployments, writing tests and documentation, and
+        turning business requirements into systems that stay maintainable.
       </p>
     </section>
 
     <section id="experience" aria-labelledby="experience-heading">
       <h2 id="experience-heading">Experience</h2>
+
       <article class="job">
-        <h3>Job Title <span class="org">— Company Name</span></h3>
-        <p class="date-range">Mon 20XX – Present</p>
+        <h3>Software Engineer &amp; Technical Solutions Owner <span class="org">— onQ Digital Group, Melbourne</span></h3>
+        <p class="date-range">Sep 2024 – Present</p>
         <ul>
-          <li>Accomplishment with a measurable result (e.g. cut deploy time 60%).</li>
-          <li>Accomplishment with a measurable result.</li>
+          <li>Build and run production software for digital signage, audience analytics and data platforms, using LLM tools (Claude, MCP) for AI-assisted development.</li>
+          <li>Maintain a multi-tenant PHP/MySQL CMS with a Deno/TypeScript frontend; ship secure REST APIs and SQL workflows.</li>
+          <li>Develop async Rust services with Tokio and NATS JetStream for media encoding, authentication and data processing.</li>
+          <li>Own testing, CI/CD and deployment across Docker, Incus, Alpine Linux and Caddy.</li>
         </ul>
       </article>
+
+      <article class="job">
+        <h3>Enterprise Customer Service &amp; Solutions Consultant <span class="org">— Endeavour Group, Remote</span></h3>
+        <p class="date-range">Sep 2023 – Jun 2026</p>
+        <ul>
+          <li>Investigated complex incidents spanning multiple applications and business processes in enterprise retail platforms.</li>
+          <li>Coordinated technical and operational teams to resolve incidents; translated findings into clear actions for stakeholders.</li>
+        </ul>
+      </article>
+
+      <article class="job">
+        <h3>Campaign &amp; Digital Solutions Developer <span class="org">— Flybuys, Melbourne</span></h3>
+        <p class="date-range">Nov 2023 – Apr 2024</p>
+        <ul>
+          <li>Built customer-facing digital campaigns on a large retail loyalty platform.</li>
+          <li>Ran testing, QA and release validation before production deployment.</li>
+        </ul>
+      </article>
+
+      <article class="job">
+        <h3>Web Developer <span class="org">— Expert Express, Melbourne</span></h3>
+        <p class="date-range">Mar 2022 – Oct 2023</p>
+        <ul>
+          <li>Built frontend, backend, REST API and database functionality for transport and fleet operations.</li>
+          <li>Created dashboards and workflows for fleet activity and operational performance.</li>
+        </ul>
+      </article>
+
+      <article class="job">
+        <h3>Software Engineer <span class="org">— MIND Infotech, Noida, India</span></h3>
+        <p class="date-range">Jun 2018 – Jun 2019</p>
+        <ul>
+          <li>Developed enterprise ERP applications in C#/.NET, JavaScript and SQL.</li>
+          <li>Built SSIS packages for ETL and designed SSRS operational reports.</li>
+        </ul>
+      </article>
+
+      <article class="job">
+        <h3>Engineer Trainee <span class="org">— MIND Infotech, Noida, India</span></h3>
+        <p class="date-range">Jun 2017 – May 2018</p>
+        <ul>
+          <li>Supported C#/.NET development, testing and production troubleshooting; promoted to Software Engineer.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section id="projects" aria-labelledby="projects-heading">
+      <h2 id="projects-heading">Featured Project</h2>
+      <article class="job">
+        <h3>This website <span class="org">— <a href="https://github.com/hxrsh159/cloud-resume-challenge" target="_blank" rel="noopener">github.com/hxrsh159/cloud-resume-challenge</a></span></h3>
+        <ul>
+          <li>Serverless resume platform on GCP: static site on a global CDN with managed TLS, plus the live visitor counter below.</li>
+          <li>Backend is a Rust (axum) API in a 9 MB distroless container on Cloud Run, incrementing a counter in Firestore through real transactions.</li>
+          <li>All infrastructure is Terraform; CI/CD uses Workload Identity Federation — no stored credentials anywhere.</li>
+        </ul>
+      </article>
+      <p class="muted">On GitHub since 2015 — <a href="https://github.com/hxrsh159" target="_blank" rel="noopener">40 public repos</a> spanning Rust, TypeScript and JavaScript.</p>
     </section>
 
     <section id="skills" aria-labelledby="skills-heading">
       <h2 id="skills-heading">Skills</h2>
       <ul class="skills-grid">
-        <li>GCP (Cloud Run, GCS, Cloud CDN, Firestore)</li>
-        <li>Terraform / IaC</li>
-        <li>Rust</li>
-        <li>Docker &amp; distroless images</li>
-        <li>GitHub Actions / Workload Identity Federation</li>
-        <li>Linux &amp; Networking</li>
+        <li>C# / .NET, Rust, TypeScript, PHP, SQL</li>
+        <li>REST APIs, async services, event-driven systems</li>
+        <li>PostgreSQL, MySQL, SQLx, ETL (SSIS/SSRS)</li>
+        <li>Azure Blob Storage, NATS JetStream, GCP</li>
+        <li>Docker, GitHub Actions, Linux, Caddy</li>
+        <li>Testing: unit, integration, end-to-end</li>
+        <li>Terraform, infrastructure as code</li>
+        <li>Agile delivery, code review, documentation</li>
       </ul>
     </section>
 
-    <section id="certifications" aria-labelledby="certifications-heading">
-      <h2 id="certifications-heading">Certifications</h2>
+    <section id="education" aria-labelledby="education-heading">
+      <h2 id="education-heading">Education</h2>
       <ul>
-        <li>Google Cloud Professional Cloud Architect (in progress)</li>
+        <li>Master of Information Technology — RMIT University, Melbourne (Distinction)</li>
+        <li>B.Tech, Computer Science — Guru Gobind Singh Indraprastha University, Delhi (Distinction)</li>
       </ul>
     </section>
   </main>
