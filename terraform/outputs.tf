@@ -18,6 +18,16 @@ output "cloud_run_url" {
   value       = google_cloud_run_v2_service.api.uri
 }
 
+output "wif_provider" {
+  description = "GitHub repo variable WIF_PROVIDER."
+  value       = google_iam_workload_identity_pool_provider.github.name
+}
+
+output "wif_service_account" {
+  description = "GitHub repo variable WIF_SERVICE_ACCOUNT."
+  value       = google_service_account.ci.email
+}
+
 output "deploy_hint" {
   description = "Command to publish the frontend/ directory (Phase 4 automates this in GitHub Actions)."
   value       = "firebase deploy --only hosting"

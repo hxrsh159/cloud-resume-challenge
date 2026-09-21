@@ -12,8 +12,12 @@ terraform {
     }
   }
 
-  # PHASE 1 runs against local state. In Phase 4 we migrate this to a
-  # remote GCS backend so GitHub Actions shares one consistent state file.
+  # Remote state (Phase 4): shared between local runs and GitHub Actions.
+  # Versioned bucket; see state.tf.
+  backend "gcs" {
+    bucket = "cloud-resume-challenge-509306-tfstate"
+    prefix = "terraform/state"
+  }
 }
 
 provider "google" {

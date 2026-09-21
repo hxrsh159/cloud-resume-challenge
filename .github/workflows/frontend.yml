@@ -1,0 +1,28 @@
+name: frontend
+
+on:
+  push:
+    branches: [main]
+    paths: ["frontend/**", "firebase.json", ".firebaserc"]
+  workflow_dispatch:
+
+permissions:
+  id-token: write # required: mints the OIDC token exchanged via WIF
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.WIF_PROVIDER }}
+          service_account: ${{ vars.WIF_SERVICE_ACCOUNT }}
+
+      # auth@v2 exports GOOGLE_APPLICATION_CREDENTIALS for later steps;
+      # firebase-tools picks it up natively. No secrets in this repo.
+      - name: Deploy to Firebase Hosting
+        run: npx -y firebase-tools@latest deploy --only hosting --project ${{ vars.GCP_PROJECT_ID }} --non-interactive

@@ -1,0 +1,53 @@
+name: backend
+
+on:
+  push:
+    branches: [main]
+    paths: ["backend/**", "terraform/**"]
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AR_IMAGE: us-central1-docker.pkg.dev/cloud-resume-challenge-509306/resume-api/resume-api
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.WIF_PROVIDER }}
+          service_account: ${{ vars.WIF_SERVICE_ACCOUNT }}
+          token_format: access_token
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Docker login to Artifact Registry
+        run: echo "${{ steps.auth.outputs.access_token }}" | docker login -u oauth2accesstoken --password-stdin https://us-central1-docker.pkg.dev
+
+      - name: Build and push
+        working-directory: backend
+        run: |
+          docker build -t $AR_IMAGE:latest .
+          docker push $AR_IMAGE:latest
+
+      - name: Resolve image digest
+        id: digest
+        run: |
+          DIGEST=$(docker buildx imagetools inspect $AR_IMAGE:latest --format '{{.Manifest.Digest}}')
+          echo "digest=$DIGEST" >> "$GITHUB_OUTPUT"
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform apply (deploy new revision)
+        working-directory: terraform
+        run: |
+          terraform init -input=false
+          terraform apply -auto-approve -input=false \
+            -var image_digest=${{ steps.digest.outputs.digest }}
