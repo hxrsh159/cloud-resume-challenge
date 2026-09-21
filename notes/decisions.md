@@ -81,3 +81,41 @@ Newest last. Each entry: context, decision, why, what was rejected.
 - Content rules: plain language, no fluff, facts match Resume.odt exactly
   (roles, dates, overlap between onQ Digital and Endeavour Group is as
   written in the resume — do not editorialize).
+
+## ADR-009: Digest-pinned Cloud Run deploys (never :latest)
+
+- Context: after pushing a new image over :latest, `terraform apply` created
+  no new revision — Cloud Run diffs the template STRING, not the digest
+  behind the tag.
+- Decision: `image_digest` variable; CI passes `-var image_digest=sha256:...`.
+- Why: immutable deploys, exact rollback via terraform, revision history
+  matches code history.
+
+## ADR-010: cpu_idle = true + 512 Mi on Cloud Run
+
+- Context: 256 Mi rejected — GCP requires >=512 Mi when CPU is
+  always-allocated.
+- Decision: request-based CPU (cpu_idle=true) + 512 Mi.
+- Why: request-based billing is the scale-to-zero $0-at-rest contract;
+  a 9 MB static Rust binary idles far under 512 Mi.
+
+## ADR-011: Health endpoint is /health, not /healthz
+
+- Finding: Google's front end reserves /healthz and answers it before the
+  container (proven: GFE 404 page = 1568 B vs axum 404 = 0 B).
+- Rule: never use /healthz (or /_ah/*) as app routes on GCP serverless.
+
+## ADR-012: Public API endpoint, CORS as the browser gate
+
+- Decision: run.invoker = allUsers; CORS allowlist (theozdev.com, www,
+  web.app, firebaseapp.com) gates browser use.
+- Why: a public counter API is the point of the project; CORS stops casual
+  cross-site browser embedding while curl/Postman access is acceptable.
+  Rate abuse risk is capped by max_instance_count=3 + budget alert.
+
+## ADR-013: Billing via REST, guardrail budget day one
+
+- Free-trial billing accounts cannot reopen; new pay-as-you-go account
+  ("Admin", AUD) created in console, linked to project via REST PUT.
+- $5 AUD budget "resume-site-guardrail" with 50/90/100% email alerts —
+  billingbudgets API (note: needs x-goog-user-project header with ADC).

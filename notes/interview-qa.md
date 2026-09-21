@@ -97,6 +97,37 @@ On Cloud Run, gcp_auth hits the metadata server for a token scoped to the
 attached service account. No credential file exists in the image. Locally
 it falls back to gcloud ADC.
 
+## Cloud Run / deployment (Phase 3)
+
+**Q: Why digest-pinned images instead of :latest?**
+Two reasons. Reproducibility: a digest is immutable, so revision N always
+runs exactly the bits I built and reviewed — rollback is a terraform apply
+with the old digest. And a practical GCP gotcha: Cloud Run diffs the
+template string, so re-pushing :latest and re-applying creates NO new
+revision. Digest pinning fixes both.
+
+**Q: Least privilege on the runtime service account?**
+The Cloud Run service runs as a dedicated SA with exactly one role:
+datastore.user. No storage, no logging admin, nothing else. If the
+container is compromised, the blast radius is the counter entity.
+
+**Q: The endpoint is public — how is that safe?**
+Invoker is allUsers because a public counter is the product. Browsers are
+gated by a CORS allowlist (only my origins get the ACAO header). Cost abuse
+is bounded by max instances = 3 and a $5 budget with 50/90/100% alerts.
+If I needed more, I'd add Cloud Armor or API keys.
+
+**Q: Tell me about a weird platform bug you hit.**
+/healthz never reached my container — Google's front end reserves that
+path and answers it itself. I proved it by byte-size fingerprinting: GFE's
+404 page is 1568 bytes, axum's 404 is 0 bytes. Renamed to /health.
+
+**Q: How do you keep a side project at $0 without surprises?**
+Scale-to-zero (min instances 0), request-based CPU (cpu_idle), a 9 MB
+image (Artifact Registry pennies), Firestore free tier — plus a billing
+budget with threshold alerts as the guardrail, because "should be free"
+is not a control.
+
 ## STAR bullet seeds (expand in Phase 6)
 
 - Built zero-cost serverless resume platform on GCP (Firebase Hosting CDN,
