@@ -35,6 +35,31 @@ dig +short theozdev.com TXT @1.1.1.1      # expect "hosting-site=theozdev"
 curl -sI https://theozdev.com/            # 200 once cert issued
 ```
 
+## Backend (backend/)
+
+```bash
+cargo build                                # local compile check
+GCP_PROJECT_ID=cloud-resume-challenge-509306 cargo run   # uses gcloud ADC
+curl -s http://localhost:8080/api/visitors # {"count":N}
+
+podman build -t resume-api .               # distroless image (~9 MB)
+# container needs creds at gcloud well-known path (see notes/decisions.md ADR-007 quirk):
+podman run -p 8081:8080 -e GCP_PROJECT_ID=cloud-resume-challenge-509306 \
+  -v "/tmp/adc.json:/home/nonroot/.config/gcloud/application_default_credentials.json:ro,Z" \
+  resume-api
+```
+
+## Extract resume ODT to text
+
+```bash
+unzip -p ~/Documents/Resume.odt content.xml | python3 -c "
+import sys, re, html
+x = sys.stdin.read()
+x = re.sub(r'</text:(p|h)>', '\n', x)
+x = re.sub(r'<[^>]+>', '', x)
+print(html.unescape(x))"
+```
+
 ## DNS records (Cloudflare dashboard, both grey-cloud)
 
 - A     @ -> 199.36.158.100

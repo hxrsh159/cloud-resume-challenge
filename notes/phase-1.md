@@ -1,6 +1,9 @@
 # Phase 1: Frontend + Production Static Hosting
 
-Status: deployed. `theozdev.web.app` live; `theozdev.com` pending cert.
+Status: COMPLETE. https://theozdev.com live with Google-managed cert
+(issuer: Google Trust Services WR3). Site content = real resume
+(Harshit Singh) as of 2026-09-21; cert provisioned ~30 min after DNS records
+went live (normal async window).
 
 ## What exists
 

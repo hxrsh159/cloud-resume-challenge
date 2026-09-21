@@ -31,7 +31,18 @@ emojis, no verbosity. Facts, reasons, commands.
 
 ## Project facts
 
+- Owner: Harshit Singh, Melbourne — ausharshitsingh@gmail.com
+- LinkedIn: linkedin.com/in/harsh159 — GitHub: github.com/hxrsh159 (since 2015)
+- GitHub repo: github.com/hxrsh159/cloud-resume-challenge (public)
 - GCP project: `cloud-resume-challenge-509306`
-- Domain: `theozdev.com` (Cloudflare registrar, DNS on Cloudflare)
+- Domain: `theozdev.com` (Cloudflare registrar, DNS on Cloudflare) — LIVE with managed cert
 - Firebase Hosting site: `theozdev` -> https://theozdev.web.app
+- Firestore: (default) DB, DATASTORE_MODE, us-central1 (PERMANENT location)
+- Backend image: resume-api, 9.04 MB distroless/static (podman build works)
 - Repo root: `/home/harsh/Development/Cloud_Resume_Challenge`
+
+## Content source of truth
+
+Resume content was extracted from `/home/harsh/Documents/Resume.odt`
+(2026-09-21). If the ODT changes, re-extract and sync frontend/index.html.
+Note: LinkedIn is not scrapeable (HTTP 999 authwall); ODT is the source.

@@ -70,6 +70,33 @@ The fetch is wrapped in try/catch; on failure the UI renders "unavailable"
 and logs a warning. The static page is fully useful without the API —
 graceful degradation by design.
 
+## Backend (Phase 2)
+
+**Q: How is the visitor counter atomic?**
+Every increment runs in a Datastore transaction: begin, read the entity
+inside the transaction, commit the new value. If two requests race,
+Datastore aborts one transaction; my code classifies the conflict (HTTP 409
+or ABORTED) and retries with backoff. No lost updates — that is the
+difference between this and read-then-write without a transaction.
+
+**Q: Why REST instead of a gRPC client library?**
+The community datastore crate is unmaintained/removed and Google's official
+Rust SDK only ships the admin surface. REST + gcp_auth gave explicit control
+of the transaction flow and dropped the entire tonic/prost gRPC stack —
+smaller binary, faster CI, fewer dependencies to audit.
+
+**Q: Why is the container 9 MB and why does that matter?**
+Multi-stage build: cargo-chef caches dependency compilation separately from
+application code, the binary is compiled fully static against musl, and the
+runtime is gcr.io/distroless/static running as nonroot — no shell, no libc,
+no package manager. Attack surface is the binary itself, cold starts are
+fast, and image pulls on Cloud Run are near-instant.
+
+**Q: How does the container authenticate to GCP without keys?**
+On Cloud Run, gcp_auth hits the metadata server for a token scoped to the
+attached service account. No credential file exists in the image. Locally
+it falls back to gcloud ADC.
+
 ## STAR bullet seeds (expand in Phase 6)
 
 - Built zero-cost serverless resume platform on GCP (Firebase Hosting CDN,

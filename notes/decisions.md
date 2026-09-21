@@ -54,3 +54,30 @@ Newest last. Each entry: context, decision, why, what was rejected.
 - Why: single-developer local applies are fine early; CI/CD requires shared
   state. GCS backend bucket gets created and state migrated when GitHub
   Actions pipelines are built (Phase 4).
+
+## ADR-007: Datastore access via REST + gcp_auth, not a client crate
+
+- Context: spec asked for the `google-cloud-datastore` crate.
+- Finding: that crate no longer exists in the crates.io index; the official
+  Google Rust SDK ships `google-cloud-datastore-admin-v1` (admin only, no
+  data plane).
+- Decision: call Datastore REST v1 directly with reqwest (rustls) + gcp_auth.
+- Why: explicit transaction control (begin/lookup/commit), no tonic/prost
+  gRPC stack -> smaller binary, faster builds, fewer deps. rustls+ring with
+  webpki-roots compiled in means the distroless/static image needs no CA
+  bundle and no OpenSSL.
+- Quirk: gcp_auth's GOOGLE_APPLICATION_CREDENTIALS path expects service
+  account JSON; user ADC (authorized_user) only loads from the gcloud
+  well-known path. Irrelevant on Cloud Run (metadata server).
+
+## ADR-008: Site content strategy — one real project, not a repo wall
+
+- Context: GitHub account has 40 public repos, mostly course/tutorial forks.
+- Decision: featured-project section spotlights ONLY cloud-resume-challenge
+  (this site) with honest technical detail; other repos referenced only as
+  "40 public repos since 2015".
+- Why: one strong original project outweighs many forks for recruiters;
+  avoids overstating tutorial work.
+- Content rules: plain language, no fluff, facts match Resume.odt exactly
+  (roles, dates, overlap between onQ Digital and Endeavour Group is as
+  written in the resume — do not editorialize).
