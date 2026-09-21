@@ -5,6 +5,9 @@ terraform/*.tfstate.*
 terraform/tfplan
 .terraform.lock.hcl
 
+# Rust build artifacts
+target/
+
 # Firebase CLI cache
 .firebase/
 
