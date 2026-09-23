@@ -42,8 +42,20 @@ Browser -> theozdev.com (Cloudflare DNS, grey-cloud, A -> 199.36.158.100)
 Verified end-to-end 2026-09-21: counter increments on theozdev.com; CORS
 header echoes only for allowlisted origins. Budget guardrail $5 AUD active.
 
-Remaining vs target: CI/CD (Phase 4 = WIF + GitHub Actions + remote state),
-tests (Phase 5), docs polish (Phase 6).
+## Current (end of Phase 6) — COMPLETE
+
+Everything above plus:
+- CI/CD: GitHub Actions (frontend.yml, backend.yml) authenticate via WIF —
+  no stored secrets. Backend pipeline is test-gated (cargo test) and
+  deploys digest-pinned Cloud Run revisions via terraform apply.
+- Terraform state: remote, versioned GCS bucket; shared by local + CI.
+- Tests: 8 unit tests (mock CounterStore + classify mapping); local
+  integration via docker-compose + Datastore emulator (no creds).
+- Docs: root README.md with data-flow diagram; this notes/ directory;
+  design-system/theozdev/MASTER.md governs UI changes.
+
+Target architecture reached. Nothing from the original 6-phase plan is
+outstanding.
 
 ## Cost model
 

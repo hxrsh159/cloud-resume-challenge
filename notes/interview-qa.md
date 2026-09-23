@@ -128,6 +128,27 @@ image (Artifact Registry pennies), Firestore free tier — plus a billing
 budget with threshold alerts as the guardrail, because "should be free"
 is not a control.
 
+## Testing / quality (Phase 5)
+
+**Q: How do you test a handler that talks to a cloud database?**
+Two layers. Unit: the handler depends on a CounterStore trait, so tests
+inject a mock — including a 50-way concurrent test asserting every caller
+gets a unique count, and a failure test asserting 500s carry a generic
+message with no internal detail leaked. Integration: docker-compose with
+the Datastore emulator — one env var (DATASTORE_EMULATOR_HOST) switches the
+store to plain HTTP with no credentials, so the real transaction code runs
+against a real Datastore API locally.
+
+**Q: How do tests relate to deployment?**
+cargo test is a pipeline gate before the Docker build. Failing tests block
+the deploy — verified in CI logs. Code on main is always deployable, and
+deployed code always passed tests.
+
+**Q: What would you add next?**
+Load testing against the emulator compose stack, a staging project for
+terraform plan previews on PRs, and Cloud Monitoring uptime checks on the
+API. The seams are built for all three.
+
 ## STAR bullets (final, Phase 6 — Cloud/DevOps Engineer resume)
 
 **Serverless platform engineering.** *Situation:* personal resume site with

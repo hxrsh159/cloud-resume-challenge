@@ -11,6 +11,9 @@ Cloud Resume Challenge — serverless resume site on GCP, built in 6 phases.
 | `phase-1.md` | Frontend + static hosting |
 | `phase-2.md` | Firestore + Rust backend + distroless Dockerfile |
 | `phase-3.md` | Artifact Registry + Cloud Run + billing + live counter |
+| `phase-4.md` | WIF keyless CI/CD + remote state + GitHub Actions |
+| `phase-5.md` | Refactors, 8 unit tests, emulator compose stack |
+| `phase-6.md` | README + STAR bullets + project closeout |
 | `interview-qa.md` | Likely interview questions with prepared answers |
 | `runbook.md` | Every command that worked, copy-paste ready |
 
@@ -51,7 +54,24 @@ emojis, no verbosity. Facts, reasons, commands.
 - Project number: 264595501605
 - Billing: account 013928-968C06-22424A "Admin" (AUD), linked; budget
   "resume-site-guardrail" $5 AUD, alerts 50/90/100%
+- Terraform state: gs://cloud-resume-challenge-509306-tfstate (versioned,
+  public access blocked), prefix terraform/state
+- WIF: pool/provider `github` — provider path
+  projects/264595501605/locations/global/workloadIdentityPools/github/providers/github
+- CI SA: github-ci@cloud-resume-challenge-509306.iam.gserviceaccount.com
+- GitHub repo variables (NOT secrets): WIF_PROVIDER, WIF_SERVICE_ACCOUNT,
+  GCP_PROJECT_ID
+- Pipelines: frontend.yml (firebase deploy), backend.yml (cargo test gate ->
+  docker build/push -> terraform apply digest). All runs green.
+- GitHub profile cleanup 2026-09-21: 35 low-impact repos deleted; 5 remain
+  (cloud-resume-challenge, UMCC, FrontEnd_App, sanity-nextjs-site, IT-Nana);
+  profile README at hxrsh159/hxrsh159
 - Repo root: `/home/harsh/Development/Cloud_Resume_Challenge`
+
+## Project status: COMPLETE (all 6 phases live, 2026-09-21)
+
+Maintenance: push to main deploys automatically. Update these notes by
+saying "Update notes" in the agent session.
 
 ## Content source of truth
 

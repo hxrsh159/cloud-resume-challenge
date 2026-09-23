@@ -106,9 +106,39 @@ curl -X PUT -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json
 # -H "x-goog-user-project: cloud-resume-challenge-509306"
 ```
 
+## Phase 4: CI/CD operations
+
+```bash
+# repo variables (CLI works; raw REST PUT 404s with our token scopes)
+gh variable set WIF_PROVIDER -b "<provider-path>" -R hxrsh159/cloud-resume-challenge
+gh variable list -R hxrsh159/cloud-resume-challenge
+
+# watch / dispatch pipelines
+gh run list -R hxrsh159/cloud-resume-challenge
+gh run watch <run-id> -R hxrsh159/cloud-resume-challenge --exit-status
+gh workflow run frontend.yml -R hxrsh159/cloud-resume-challenge
+gh run view <run-id> -R hxrsh159/cloud-resume-challenge --log-failed
+
+# state migration (already done; reference for rebuilds)
+terraform init -migrate-state   # interactive: answer "yes"
+```
+
+## Phase 5: tests + local stack
+
+```bash
+cd backend && cargo test                 # 8 tests, no GCP needed
+podman-compose up --build -d             # or: docker compose up --build
+curl http://localhost:8081/api/visitors  # emulator counter starts at 1
+podman-compose down
+```
+
 ## Agent environment changes (2026-09-21)
 
 - Cloudflare skills installed to ~/.agents/skills (15 skills)
 - Cloudflare MCP servers added to ~/.config/opencode/opencode.json
   (cloudflare, cloudflare-docs, cloudflare-bindings, cloudflare-builds,
   cloudflare-observability); core `cloudflare` OAuth completed
+- ui-ux-pro-max skill installed globally: ~/.agents/skills/ui-ux-pro-max
+  (design-system generator; CLI: npx ui-ux-pro-max-cli). Project design
+  system persisted at design-system/theozdev/MASTER.md (see ADR-016).
+- gh CLI token scopes now: gist, read:org, repo, delete_repo
