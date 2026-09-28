@@ -14,6 +14,7 @@ Cloud Resume Challenge — serverless resume site on GCP, built in 6 phases.
 | `phase-4.md` | WIF keyless CI/CD + remote state + GitHub Actions |
 | `phase-5.md` | Refactors, 8 unit tests, emulator compose stack |
 | `phase-6.md` | README + STAR bullets + project closeout |
+| `post-launch.md` | UI revamp + verification results after closeout |
 | `interview-qa.md` | Likely interview questions with prepared answers |
 | `runbook.md` | Every command that worked, copy-paste ready |
 

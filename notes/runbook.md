@@ -132,8 +132,32 @@ curl http://localhost:8081/api/visitors  # emulator counter starts at 1
 podman-compose down
 ```
 
-## Agent environment changes (2026-09-21)
+## Real-browser E2E checks (headless Chromium)
 
+```bash
+# render + JS + DOM dump (virtual time lets fetch/animations run)
+chromium --headless=new --disable-gpu --no-sandbox \
+  --virtual-time-budget=12000 --dump-dom https://theozdev.com/ | grep visitor-counter
+
+# console errors
+chromium --headless=new --disable-gpu --no-sandbox --virtual-time-budget=12000 \
+  --enable-logging=stderr --dump-dom https://theozdev.com/ 2>&1 >/dev/null | grep -i error
+
+# screenshots
+chromium --headless=new --disable-gpu --no-sandbox --virtual-time-budget=12000 \
+  --window-size=1280,2600 --screenshot=/tmp/site.png https://theozdev.com/
+chromium --headless=new --window-size=375,1400 --screenshot=/tmp/mobile.png https://theozdev.com/
+
+# reduced-motion fallback
+chromium --headless=new --force-prefers-reduced-motion --dump-dom https://theozdev.com/
+```
+
+Note: with ADR-018, headless runs leave the counter as "-" (webdriver=true);
+verify counts via the API directly instead.
+
+## Agent environment changes
+
+2026-09-21:
 - Cloudflare skills installed to ~/.agents/skills (15 skills)
 - Cloudflare MCP servers added to ~/.config/opencode/opencode.json
   (cloudflare, cloudflare-docs, cloudflare-bindings, cloudflare-builds,
@@ -142,3 +166,9 @@ podman-compose down
   (design-system generator; CLI: npx ui-ux-pro-max-cli). Project design
   system persisted at design-system/theozdev/MASTER.md (see ADR-016).
 - gh CLI token scopes now: gist, read:org, repo, delete_repo
+
+2026-09-23:
+- chrome-devtools MCP added to opencode config (local, npx
+  chrome-devtools-mcp@latest). Chromium at /usr/bin/chromium (officially
+  only Chrome/Chrome-for-Testing supported; working so far).
+- Image tooling present: heif-convert, ImageMagick (magick/convert), ffmpeg.

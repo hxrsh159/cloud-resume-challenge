@@ -147,3 +147,25 @@ Newest last. Each entry: context, decision, why, what was rejected.
   developer-portfolio rules; light/luxury baseline rejected with reasons).
 - All future UI changes must follow MASTER.md; deviations get added as
   overrides. Page-level rules go in design-system/theozdev/pages/.
+
+## ADR-017: Self-host every static asset (no third-party hotlinks)
+
+- Context: demo avatar was hotlinked to i.pravatar.cc — a third-party
+  outage would break the hero, and it leaks visitor IPs to an external
+  service.
+- Rule: every asset served from the site lives in frontend/ (or Firebase
+  Hosting generally). External images/fonts are downloaded and committed.
+  Exception so far: Google Fonts CSS import (accepted risk, documented in
+  MASTER.md).
+
+## ADR-018: Visitor counter filters bots
+
+- Context: counter climbed 15 -> 91 in days; most page loads are crawlers,
+  and each load costs one Firestore write.
+- Decision: counter.js skips the API call when navigator.webdriver is true
+  or the UA matches bot|crawl|spider|slurp|headless. Bots see the em-dash
+  placeholder; humans get the count.
+- Why client-side: free, zero backend change, and honest — the API stays
+  public (ADR-012); we just stop paying writes for non-humans.
+- Note: headless-Chromium E2E checks now observe the placeholder by design;
+  counter verification uses the API directly.
