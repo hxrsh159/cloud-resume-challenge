@@ -4,7 +4,41 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Harshit Singh — Software Engineer in Melbourne. Production software since 2017 across ERP, retail, logistics and digital signage." />
-  <title>Harshit Singh | Software Engineer</title>
+  <title>Harshit Singh | Software Engineer — Melbourne</title>
+  <meta name="description" content="Harshit Singh — Software Engineer in Melbourne. Production software since 2017: Rust, .NET, TypeScript, cloud platforms, CI/CD. Portfolio and blog." />
+  <link rel="canonical" href="https://theozdev.com/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Harshit Singh | Software Engineer" />
+  <meta property="og:description" content="Production software since 2017 — Rust, .NET, TypeScript, cloud platforms, keyless CI/CD. This site is itself the demo." />
+  <meta property="og:url" content="https://theozdev.com/" />
+  <meta property="og:image" content="https://theozdev.com/avatar.jpg" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Harshit Singh | Software Engineer" />
+  <meta name="twitter:description" content="Production software since 2017 — Rust, .NET, TypeScript, cloud platforms, keyless CI/CD." />
+  <meta name="twitter:image" content="https://theozdev.com/avatar.jpg" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Harshit Singh",
+    "url": "https://theozdev.com/",
+    "image": "https://theozdev.com/avatar.jpg",
+    "jobTitle": "Software Engineer",
+    "address": { "@type": "PostalAddress", "addressLocality": "Melbourne", "addressCountry": "AU" },
+    "sameAs": [
+      "https://github.com/hxrsh159",
+      "https://www.linkedin.com/in/harsh159/"
+    ]
+  }
+  </script>
+  <script>
+    // Apply persisted theme before first paint (no flash). See main.js toggle.
+    try {
+      if (localStorage.getItem("theme") === "light") {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    } catch (e) {}
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="styles.css" />
@@ -13,6 +47,10 @@
   <div class="aurora" aria-hidden="true"><span class="blob blob-a"></span><span class="blob blob-b"></span></div>
 
   <header class="hero">
+    <button class="theme-toggle" type="button" aria-label="Toggle dark/light theme">
+      <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
     <div class="container hero-inner">
       <img class="avatar" src="avatar.jpg" alt="Portrait of Harshit Singh" width="128" height="128" />
       <div class="hero-text">
@@ -23,6 +61,7 @@
           <a class="btn btn-primary" href="https://github.com/hxrsh159" target="_blank" rel="noopener">GitHub</a>
           <a class="btn btn-secondary" href="https://www.linkedin.com/in/harsh159/" target="_blank" rel="noopener">LinkedIn</a>
           <a class="btn btn-secondary" href="mailto:ausharshitsingh@gmail.com">Email me</a>
+          <a class="btn btn-secondary" href="blog/">Blog</a>
         </nav>
       </div>
     </div>

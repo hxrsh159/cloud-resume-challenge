@@ -3,6 +3,26 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
+/* Light theme (MASTER.md "Color Palette (light)"). Applied via
+   data-theme="light" on <html>; dark :root below stays the default. */
+:root[data-theme="light"] {
+  --color-background: #F8FAFC;
+  --color-foreground: #0F172A;
+  --color-card: #FFFFFF;
+  --color-card-foreground: #0F172A;
+  --color-muted: #E9EEF5;
+  --color-muted-foreground: #475569;
+  --color-border: #CBD5E1;
+  --color-accent: #15803D;
+  --color-on-accent: #FFFFFF;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+:root[data-theme="light"] .aurora { opacity: 0.4; }
+:root[data-theme="light"] .hero h1 { text-shadow: none; }
+:root[data-theme="light"] .avatar { box-shadow: none; }
+
 :root {
   --color-glow-blue: #2563EB; /* pages/index.md override: secondary aurora glow */
   --color-background: #0F172A;
@@ -85,6 +105,7 @@ body {
 
 /* --- Hero banner --- */
 .hero {
+  position: relative;
   padding: var(--space-2xl) 0 var(--space-xl);
   border-bottom: 1px solid var(--color-border);
 }
@@ -262,6 +283,62 @@ h2 {
 }
 
 #visitor-counter { color: var(--color-accent); font-weight: 600; }
+
+/* --- Theme toggle --- */
+.theme-toggle {
+  position: absolute;
+  top: var(--space-lg);
+  right: var(--space-lg);
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-foreground);
+  transition: border-color 200ms ease;
+}
+.theme-toggle:hover { border-color: var(--color-accent); }
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+.theme-toggle svg { width: 20px; height: 20px; }
+:root[data-theme="light"] .icon-moon { display: none; }
+:root:not([data-theme="light"]) .icon-sun { display: none; }
+
+/* --- Blog --- */
+.post-list { display: grid; gap: var(--space-md); }
+.post-card {
+  display: block;
+  color: var(--color-card-foreground);
+}
+.post-card:hover { text-decoration: none; }
+.post-card h3 { margin: 0 0 var(--space-xs); }
+.post-card p { margin: 0; color: var(--color-muted-foreground); }
+
+.post-header { margin-bottom: var(--space-xl); }
+.post-header h1 {
+  margin: 0 0 var(--space-xs);
+  font-size: 1.9rem;
+  letter-spacing: -0.015em;
+}
+.post-body p { margin: 0 0 var(--space-md); }
+.post-body ul { padding-left: var(--space-lg); margin: 0 0 var(--space-md); }
+.post-body code {
+  background: var(--color-muted);
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+  font-size: 0.9em;
+}
+.back-link {
+  display: inline-block;
+  margin-bottom: var(--space-lg);
+  font-size: 0.9rem;
+}
 
 /* --- Scroll reveal (pages/index.md: transform/opacity only) --- */
 .reveal {

@@ -53,6 +53,26 @@ Contrast: foreground/background 16.9:1; muted-foreground/background 7.4:1;
 accent/background 8.1:1. All pass WCAG AA (4.5:1). Never put white text on
 the accent green (2.3:1 — fails); use `--color-on-accent`.
 
+## Color Palette (light) — added 2026-09-29
+
+Dark remains the default/brand. Light theme is user-selectable via toggle
+(`data-theme="light"` on <html>, persisted in localStorage). Values derive
+from the generator's original light baseline, with a deeper accent for AA:
+
+| Role | Hex |
+|------|-----|
+| Background | `#F8FAFC` |
+| Foreground | `#0F172A` |
+| Card | `#FFFFFF` |
+| Muted | `#E9EEF5` |
+| Muted Foreground | `#475569` |
+| Border | `#CBD5E1` |
+| Accent | `#15803D` (darker green: 4.6:1 on background — AA) |
+| On Accent | `#FFFFFF` |
+
+Light-theme rules: aurora blobs drop to 40% opacity; name glow and avatar
+glow removed; shadows revert to the light baseline (rgba(0,0,0,0.05-0.1)).
+
 ## Typography — Inter System
 
 - Single family: **Inter** (300/400/500/600/700) via Google Fonts.

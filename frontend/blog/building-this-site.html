@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Building this site: a serverless portfolio on GCP | Harshit Singh</title>
+  <meta name="description" content="Build log: Rust on Cloud Run, Firestore transactions, Terraform, Workload Identity Federation, and a zero-dollar architecture for a personal site." />
+  <link rel="canonical" href="https://theozdev.com/blog/building-this-site.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Building this site: a serverless portfolio on GCP" />
+  <meta property="og:description" content="Rust on Cloud Run, Firestore transactions, Terraform, and a keyless CI/CD pipeline — the full build log." />
+  <meta property="og:url" content="https://theozdev.com/blog/building-this-site.html" />
+  <meta property="og:image" content="https://theozdev.com/avatar.jpg" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Building this site: a serverless portfolio on GCP",
+    "datePublished": "2026-09-29",
+    "author": { "@type": "Person", "name": "Harshit Singh", "url": "https://theozdev.com/" }
+  }
+  </script>
+  <script>
+    try {
+      if (localStorage.getItem("theme") === "light") {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    } catch (e) {}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+  <div class="aurora" aria-hidden="true"><span class="blob blob-a"></span><span class="blob blob-b"></span></div>
+
+  <main class="container post-body">
+    <article class="post-header">
+      <p><a class="back-link" href="./">← All posts</a></p>
+      <h1>Building this site: a serverless portfolio on GCP</h1>
+      <p class="date-range">2026-09-29 · Harshit Singh</p>
+    </article>
+
+    <div>
+      <p>
+        This site is my Cloud Resume Challenge build, and it's also the demo.
+        The visitor counter at the bottom of the page is a live transaction
+        against a real backend — here is how the whole thing works, and the
+        decisions that shaped it.
+      </p>
+
+      <h2>The request path</h2>
+      <p>
+        The static site is served by Firebase Hosting (Google's edge CDN with
+        managed TLS). The counter is a Rust (axum) API in a 9 MB distroless
+        container on Cloud Run, which runs a Datastore transaction —
+        begin, read, commit with retry on conflict — against Firestore in
+        Datastore mode. No lost increments, even under parallel load; there's
+        a 50-way concurrency test in the repo proving it.
+      </p>
+
+      <h2>Why no load balancer</h2>
+      <p>
+        The classic challenge architecture puts a GCS bucket behind a global
+        HTTPS load balancer with Cloud CDN. I built that first, then priced
+        it: the forwarding rule alone is about $18/month. Firebase Hosting
+        gives the same properties — global edge caching, managed certs,
+        custom domain — at $0 within the free tier. Same story, better
+        economics. Every significant choice like this is written down as an
+        ADR in the repo's <code>notes/decisions.md</code>.
+      </p>
+
+      <h2>Keyless CI/CD</h2>
+      <p>
+        No service-account JSON keys exist anywhere. GitHub Actions mints a
+        5-minute OIDC token per run, Google's Secure Token Service exchanges
+        it (repo-scoped trust condition), and the pipeline impersonates a
+        least-privilege CI service account. The runtime service account is
+        separate and holds exactly one role: <code>datastore.user</code>.
+        Failing unit tests block deploys; images deploy by digest, never by
+        mutable tag.
+      </p>
+
+      <h2>What I'd tell someone starting</h2>
+      <ul>
+        <li>Write decisions down as you go — the ADR log is the best interview prep I have.</li>
+        <li>Verify in a real browser, not just curl. Headless Chromium screenshots caught real issues.</li>
+        <li>Put a billing budget on day one. "Should be free" is not a control.</li>
+        <li>Google's front end reserves <code>/healthz</code>. Yes, really.</li>
+      </ul>
+
+      <p>
+        Source: <a href="https://github.com/hxrsh159/cloud-resume-challenge" target="_blank" rel="noopener">github.com/hxrsh159/cloud-resume-challenge</a>.
+        More posts as new projects land.
+      </p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Visitor count: <span id="visitor-counter">—</span></p>
+    </div>
+  </footer>
+
+  <script src="../counter.js" defer></script>
+  <script src="../main.js" defer></script>
+</body>
+</html>

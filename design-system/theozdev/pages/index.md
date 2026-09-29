@@ -41,3 +41,18 @@ Avoid: slow performance. All animation must be transform/opacity only
   the timeline, with a small accent dot marker at each card's top-left.
   Implemented as a container class .timeline on #experience; cards keep
   MASTER styling otherwise.
+
+## Theme toggle (added 2026-09-29)
+
+- Dark default; toggle button (sun/moon SVG, no emoji) top-right of hero;
+  choice persisted in localStorage key `theme`; applied via data-theme on
+  <html> before first paint (inline script in <head> to avoid flash).
+- Light palette per MASTER.md "Color Palette (light)".
+
+## Blog (added 2026-09-29)
+
+- /blog/ index: card list (title, date, excerpt), newest first.
+- Posts are hand-authored static HTML at /blog/<slug>.html — no build step,
+  no JS framework; article typography in styles.css (.post-*).
+- Blog pages reuse the site shell (aurora, theme toggle, footer counter).
+- Nav: "Blog" CTA on the home hero; "Home" link on blog pages.

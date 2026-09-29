@@ -6,6 +6,17 @@
 
   var prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  // --- Theme toggle (spec: pages/index.md; palette: MASTER.md light) ---
+  var toggle = document.querySelector(".theme-toggle");
+  if (toggle) {
+    toggle.addEventListener("click", function () {
+      var root = document.documentElement;
+      var next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("theme", next); } catch (e) { /* private mode */ }
+    });
+  }
+
   // --- Role rotation ---
   var roles = [
     "production software",
