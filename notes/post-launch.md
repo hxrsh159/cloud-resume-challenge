@@ -32,3 +32,20 @@ Site repositioned from "resume posted online" to "portfolio":
 - Reduced-motion fallback confirmed via --force-prefers-reduced-motion.
 - pravatar hotlink replaced by self-hosted frontend/avatar-demo.jpg
   (ADR-017).
+
+## 2026-09-29: Real avatar, theme toggle, blog, SEO
+
+- Avatar: real photo (IMG_0493.HEIC citizenship ceremony, center-person
+  crop 1400px @ +780+100 -> 320x320, 25 KB) at frontend/avatar.jpg.
+- Theme toggle: dark default + light palette (MASTER.md "Color Palette
+  (light)", accent #15803D for AA on white). data-theme on <html>,
+  localStorage, pre-paint inline script prevents flash; SVG sun/moon,
+  no emoji (anti-pattern rule).
+- Blog: /blog/ index + first post (building-this-site.html). Hand-authored
+  static HTML, no build step. Shared shell (aurora, toggle, footer).
+- SEO: robots.txt, sitemap.xml, canonical URLs, og/twitter meta on all
+  pages, JSON-LD Person (home) + BlogPosting (posts).
+- Verified: light theme screenshot (file:// with data-theme injected),
+  blog index + post screenshots, all routes 200, pipeline green.
+- Publishing workflow: write frontend/blog/<slug>.html (copy post shell),
+  add card to blog/index.html, add <url> to sitemap.xml, push.

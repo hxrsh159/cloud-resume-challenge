@@ -71,8 +71,13 @@ emojis, no verbosity. Facts, reasons, commands.
 
 ## Project status: COMPLETE (all 6 phases live, 2026-09-21)
 
-Maintenance: push to main deploys automatically. Update these notes by
-saying "Update notes" in the agent session.
+Post-launch features (see post-launch.md): portfolio UI revamp, real
+avatar, dark/light theme toggle, blog (/blog/), SEO foundations
+(robots/sitemap/og/JSON-LD).
+
+Maintenance: push to main deploys automatically. New blog post = new
+frontend/blog/<slug>.html + card in blog/index.html + sitemap entry.
+Update these notes by saying "Update notes" in the agent session.
 
 ## Content source of truth
 
