@@ -88,3 +88,21 @@ Shipped (all verified locally + live on theozdev.com):
   E2E; blog shell consistent; pipeline run 37381913406 green; live
   routes + content types all 200 (HTML CDN cache max-age=3600 — warm
   browsers may show old shell for up to an hour).
+
+## 2026-10-06 (later): Creative layer revisions (ADR-020, user review)
+
+- All third-party portfolio references scrubbed from notes/design docs.
+- Constellation: hero-only -> fixed full-viewport background (z-index -1
+  above aurora). Window pointer tracking; pauses only on hidden tab.
+- Hero visitor pill REMOVED — counter is footer-only again (ADR-018).
+- Home sections now fill the window (min-height calc(100svh - 56px),
+  flex-centered; Experience extends taller). New #blog section (latest
+  post card + all-posts link) and #resume section (pitch + Resume
+  button + education, which folded in from the deleted Education
+  section). Nav anchors: Summary/Experience/Projects/Skills/Blog/Resume
+  (all in-page; mobile still hides anchors).
+- PDF is labeled exactly "Resume" everywhere (footer was "Resume (PDF)";
+  terminal help reworded).
+- Verified locally (0 console errors, dark/mobile screenshots, no
+  horizontal overflow at 375px emulation) and live via DOM assertions +
+  screenshot. Pipeline run 37383536335 green.
