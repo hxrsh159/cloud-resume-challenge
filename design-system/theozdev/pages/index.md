@@ -57,19 +57,27 @@ Avoid: slow performance. All animation must be transform/opacity only
 - Blog pages reuse the site shell (aurora, theme toggle, footer counter).
 - Nav: "Blog" CTA on the home hero; "Home" link on blog pages.
 
-## Creative layer (added 2026-10-06, ADR-019; reference: benscott.dev)
+## Creative layer (added 2026-10-06, ADR-019; revised ADR-020)
 
-- Constellation canvas: absolute in .hero, behind hero content; dots +
-  proximity links + pointer attraction; colors read from CSS vars so both
-  themes stay AA-quiet (lines <= 0.35 alpha); DPR-aware; density ~1 dot /
-  9000px^2, capped 120; rAF paused when hero off-screen or tab hidden;
-  prefers-reduced-motion renders one static frame.
-- Sticky nav (56px): wordmark "harshit singh" left; anchors Experience /
-  Projects / Skills + Blog + Resume (resume.pdf, new tab) right; theme
-  toggle lives here (removed from hero); ">_" terminal button. 2px accent
-  scroll-progress bar under nav. Active anchor gets accent color + 2px
-  underline offset. Body gets padding-top 56px. Mobile (<=600px): section
-  anchors hidden, Blog/Resume/toggle/terminal stay.
+- Constellation canvas: position:fixed full-viewport page background
+  (z-index -1, after .aurora so it paints above blobs, below content);
+  dots + proximity links + pointer attraction tracked on window; colors
+  from CSS vars (theme-aware, lines <= 0.35 alpha); DPR-aware; density
+  ~1 dot / 9000px^2 of viewport, capped 120; rAF paused only when the
+  tab is hidden (always on-screen otherwise); one static frame under
+  prefers-reduced-motion.
+- Full-viewport sections (ADR-020): each main section fills the window —
+  min-height: calc(100svh - 56px), flex column, content vertically
+  centered; taller content (Experience) simply extends the section.
+  Sections: Summary, Experience, Projects (showcase), Skills, Blog,
+  Resume. Education folded into the Resume section (it is resume
+  content). Footer keeps natural height.
+- Sticky nav (56px): wordmark "harshit singh" left; anchors Summary /
+  Experience / Projects / Skills / Blog / Resume (all in-page) right;
+  theme toggle lives here (removed from hero); ">_" terminal button. 2px
+  accent scroll-progress bar under nav. Active anchor gets accent color
+  + 2px underline offset. Body gets padding-top 56px. Mobile (<=600px):
+  section anchors hidden, toggle/terminal stay.
 - Entrance motion: hero children fly in on load (translateY 14px + fade,
   500ms, 60ms stagger); h2 labels grow an accent underline (width sweep
   300ms) when their section reveals; CTA buttons get magnetic pull (max
@@ -78,10 +86,14 @@ Avoid: slow performance. All animation must be transform/opacity only
   opens on ` (backtick) keydown or ">_" click; commands help / whoami /
   skills / resume (opens PDF) / visitors (live count) / theme / clear /
   exit; Esc or exit closes; input autofocused; aria-modal dialog.
-- Hero counter: "You're visitor #N" pill under CTAs, title tooltip
-  "Live from Firestore via my Rust API on Cloud Run"; stays hidden for
-  bots (ADR-018) — no em-dash in the hero.
+- Visitor counter lives in the footer only (ADR-020: hero pill removed —
+  the hero tells the story, the footer shows the number).
+- "Resume" naming (ADR-020): the PDF is labeled exactly "Resume"
+  everywhere it is linked.
 - Project showcase: .showcase two-column (SVG diagram panel on accent-
   tinted muted background, text panel), alternating direction per item;
   collapses to stacked on mobile. Diagram is inline SVG using currentColor
   + CSS vars (theme-aware, zero assets).
+- Blog section (home): latest post card + "all posts" link to /blog/.
+- Resume section (home): one-line pitch, primary download button,
+  education list.

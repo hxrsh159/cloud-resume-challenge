@@ -12,19 +12,12 @@ function isBot() {
 
 async function updateVisitorCounter() {
   const el = document.getElementById("visitor-counter");
-  const heroPill = document.getElementById("hero-counter");
-  const heroN = document.getElementById("hero-counter-n");
-  if (isBot()) return; // footer keeps "—", hero pill stays hidden (ADR-018/019)
+  if (isBot()) return; // leaves the "—" placeholder
   try {
     const res = await fetch(`${API_URL}/api/visitors`, { method: "GET" });
     if (!res.ok) throw new Error(`API responded ${res.status}`);
     const data = await res.json();
-    const pretty = data.count.toLocaleString();
-    if (el) el.textContent = pretty;
-    if (heroPill && heroN) {
-      heroN.textContent = "#" + pretty;
-      heroPill.hidden = false;
-    }
+    if (el) el.textContent = data.count.toLocaleString();
   } catch (err) {
     console.warn("Visitor counter unavailable:", err);
     if (el) el.textContent = "unavailable";

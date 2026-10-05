@@ -1,7 +1,8 @@
-// Constellation hero canvas — spec: design-system/theozdev/pages/index.md
-// (creative layer, ADR-019). Dots + proximity links + pointer attraction.
-// Theme-aware (reads CSS vars), DPR-aware, pauses off-screen/hidden tab,
-// single static frame under prefers-reduced-motion.
+// Constellation page background — spec: design-system/theozdev/pages/index.md
+// (creative layer, ADR-019/020). Fixed full-viewport canvas behind all
+// content: dots + proximity links + pointer attraction. Theme-aware (reads
+// CSS vars), DPR-aware, pauses on hidden tab, one static frame under
+// prefers-reduced-motion.
 
 (function () {
   "use strict";
@@ -11,7 +12,6 @@
 
   var prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var ctx = canvas.getContext("2d");
-  var hero = canvas.parentElement;
 
   var LINK_DIST = 130;      // px: max distance for a link
   var POINTER_DIST = 170;   // px: pointer attraction radius
@@ -34,12 +34,13 @@
 
   function resize() {
     DPR = Math.min(window.devicePixelRatio || 1, 2);
-    W = hero.clientWidth;
-    H = hero.clientHeight;
+    W = window.innerWidth;
+    H = window.innerHeight;
     canvas.width = W * DPR;
     canvas.height = H * DPR;
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
     seed();
+    if (prefersReduced) draw();
   }
 
   function seed() {
@@ -68,7 +69,7 @@
       }
       d.x += d.vx;
       d.y += d.vy;
-      // soft speed cap
+      // soft speed cap + drift floor
       d.vx *= 0.995;
       d.vy *= 0.995;
       if (Math.abs(d.vx) < 0.08) d.vx += (Math.random() - 0.5) * 0.02;
@@ -130,31 +131,18 @@
   }
 
   resize();
-  if (prefersReduced) {
-    draw(); // one static frame
-    return;
-  }
+  if (prefersReduced) return; // static frame drawn in resize()
 
-  // pause when hero off-screen
-  if ("IntersectionObserver" in window) {
-    new IntersectionObserver(function (entries) {
-      entries[0].isIntersecting ? start() : stop();
-    }, { threshold: 0.02 }).observe(hero);
-  } else {
-    start();
-  }
-
-  // pause when tab hidden
+  // full-viewport background: only pause when the tab is hidden
   document.addEventListener("visibilitychange", function () {
     document.hidden ? stop() : start();
   });
 
-  hero.addEventListener("pointermove", function (e) {
-    var rect = hero.getBoundingClientRect();
-    pointer.x = e.clientX - rect.left;
-    pointer.y = e.clientY - rect.top;
-  });
-  hero.addEventListener("pointerleave", function () {
+  window.addEventListener("pointermove", function (e) {
+    pointer.x = e.clientX;
+    pointer.y = e.clientY;
+  }, { passive: true });
+  document.addEventListener("pointerleave", function () {
     pointer.x = -9999;
     pointer.y = -9999;
   });
@@ -166,8 +154,8 @@
   });
 
   // redraw with new palette after a theme flip
-  document.querySelector(".theme-toggle") &&
-    document.querySelector(".theme-toggle").addEventListener("click", function () {
-      setTimeout(draw, 50);
-    });
+  var toggle = document.querySelector(".theme-toggle");
+  if (toggle) toggle.addEventListener("click", function () { setTimeout(draw, 50); });
+
+  start();
 })();

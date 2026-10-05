@@ -47,16 +47,18 @@
 </head>
 <body>
   <div class="aurora" aria-hidden="true"><span class="blob blob-a"></span><span class="blob blob-b"></span></div>
+  <canvas id="constellation" aria-hidden="true"></canvas>
 
   <nav class="site-nav" aria-label="Primary">
     <div class="nav-inner">
       <a class="wordmark" href="#top" aria-label="Back to top">harshit&nbsp;singh</a>
       <div class="nav-links">
+        <a href="#summary" class="nav-anchor">Summary</a>
         <a href="#experience" class="nav-anchor">Experience</a>
         <a href="#projects" class="nav-anchor">Projects</a>
         <a href="#skills" class="nav-anchor">Skills</a>
-        <a href="blog/">Blog</a>
-        <a href="resume.pdf" target="_blank" rel="noopener">Resume</a>
+        <a href="#blog" class="nav-anchor">Blog</a>
+        <a href="#resume" class="nav-anchor">Resume</a>
         <button class="terminal-open" type="button" aria-label="Open terminal" title="Open terminal (`)">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
         </button>
@@ -70,7 +72,6 @@
   </nav>
 
   <header class="hero" id="top">
-    <canvas id="constellation" aria-hidden="true"></canvas>
     <div class="container hero-inner">
       <img class="avatar fly-in" src="avatar.jpg" alt="Portrait of Harshit Singh" width="128" height="128" />
       <div class="hero-text">
@@ -84,10 +85,6 @@
           <a class="btn btn-secondary" href="mailto:ausharshitsingh@gmail.com">Email me</a>
           <a class="btn btn-secondary" href="blog/">Blog</a>
         </nav>
-        <p class="hero-counter" id="hero-counter" hidden>
-          You&rsquo;re visitor <span id="hero-counter-n">#</span>
-          <span class="hero-counter-note" title="Live from Firestore via my Rust API on Cloud Run">— served live by this site&rsquo;s Rust API</span>
-        </p>
       </div>
     </div>
   </header>
@@ -253,18 +250,37 @@
       </ul>
     </section>
 
-    <section id="education" class="reveal" aria-labelledby="education-heading">
-      <h2 id="education-heading">Education</h2>
-      <ul>
-        <li>Master of Information Technology — RMIT University, Melbourne (Distinction)</li>
-        <li>B.Tech, Computer Science — Guru Gobind Singh Indraprastha University, Delhi (Distinction)</li>
-      </ul>
+    <section id="blog" class="reveal" aria-labelledby="blog-heading">
+      <h2 id="blog-heading">Blog</h2>
+      <div class="post-list">
+        <article class="job post-card">
+          <a href="blog/building-this-site.html">
+            <h3>Building this site: a serverless portfolio on GCP</h3>
+            <p class="date-range">2026-09-29</p>
+            <p>How this site works end to end — Rust on Cloud Run, Firestore transactions, Terraform, and a keyless CI/CD pipeline — and what I learned building it.</p>
+          </a>
+        </article>
+      </div>
+      <p class="muted section-more"><a class="text-link" href="blog/">All posts</a></p>
+    </section>
+
+    <section id="resume" class="reveal" aria-labelledby="resume-heading">
+      <h2 id="resume-heading">Resume</h2>
+      <div class="resume-block">
+        <p>Everything above, condensed to one page — experience, projects, skills and education.</p>
+        <p class="resume-cta"><a class="btn btn-primary" href="resume.pdf" target="_blank" rel="noopener">Resume</a></p>
+        <h3 class="resume-sub">Education</h3>
+        <ul>
+          <li>Master of Information Technology — RMIT University, Melbourne (Distinction)</li>
+          <li>B.Tech, Computer Science — Guru Gobind Singh Indraprastha University, Delhi (Distinction)</li>
+        </ul>
+      </div>
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="container">
-      <p>Visitor count: <span id="visitor-counter">—</span> · <a href="resume.pdf" target="_blank" rel="noopener">Resume (PDF)</a></p>
+      <p>Visitor count: <span id="visitor-counter">—</span> · <a href="resume.pdf" target="_blank" rel="noopener">Resume</a></p>
     </div>
   </footer>
 

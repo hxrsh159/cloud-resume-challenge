@@ -176,13 +176,15 @@ body {
   position: relative;
   padding: var(--space-2xl) 0 var(--space-xl);
   border-bottom: 1px solid var(--color-border);
-  overflow: hidden;
 }
+/* Constellation: fixed full-viewport background, above aurora blobs,
+   below content (ADR-020) */
 #constellation {
-  position: absolute;
+  position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
+  z-index: -1;
   pointer-events: none;
 }
 .hero-inner {
@@ -206,17 +208,18 @@ body.loaded .fly-in:nth-child(3) { transition-delay: 120ms; }
 body.loaded .fly-in:nth-child(4) { transition-delay: 180ms; }
 body.loaded .fly-in:nth-child(5) { transition-delay: 240ms; }
 
-/* --- Hero counter pill --- */
-.hero-counter {
-  margin: var(--space-md) 0 0;
-  font-size: 0.9rem;
-  color: var(--color-muted-foreground);
+/* --- Resume section --- */
+.resume-block p { margin: 0 0 var(--space-md); }
+.resume-cta { margin: 0 0 var(--space-xl); }
+.resume-sub {
+  margin: 0 0 var(--space-sm);
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: -0.005em;
 }
-#hero-counter-n { color: var(--color-accent); font-weight: 600; }
-.hero-counter-note {
-  border-bottom: 1px dotted var(--color-muted-foreground);
-  cursor: help;
-}
+.resume-block ul { padding-left: var(--space-lg); margin: 0; }
+.resume-block li { margin-bottom: var(--space-xs); }
+.section-more { margin-top: var(--space-lg); }
 .avatar {
   width: 128px;
   height: 128px;
@@ -284,8 +287,14 @@ a:focus-visible {
   border-radius: 2px;
 }
 
-/* --- Sections --- */
-main section { padding: var(--space-xl) 0; }
+/* --- Sections: each fills the window (ADR-020); taller content extends --- */
+main section {
+  min-height: calc(100svh - 56px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--space-xl) 0;
+}
 main section + section { border-top: 1px solid var(--color-muted); }
 
 h2 {
@@ -388,10 +397,6 @@ h2::after {
   padding: var(--space-sm) var(--space-md);
   font-size: 0.9rem;
 }
-
-/* --- Education --- */
-#education ul { padding-left: var(--space-lg); margin: 0; }
-#education li { margin-bottom: var(--space-xs); }
 
 /* --- Footer --- */
 .site-footer {

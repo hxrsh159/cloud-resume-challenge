@@ -35,7 +35,7 @@
       print("  help       this list");
       print("  whoami     about the human behind this site");
       print("  skills     the short version");
-      print("  resume     open my resume (PDF, new tab)");
+      print("  resume     open my resume in a new tab");
       print("  visitors   live visitor count from Firestore");
       print("  theme      toggle dark/light");
       print("  ping       check the API");

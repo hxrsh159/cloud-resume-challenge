@@ -170,12 +170,12 @@ Newest last. Each entry: context, decision, why, what was rejected.
 - Note: headless-Chromium E2E checks now observe the placeholder by design;
   counter verification uses the API directly.
 
-## ADR-019: Creative layer (benscott.dev study) — what we adopt, what we skip
+## ADR-019: Creative layer — what we adopt, what we skip
 
-- Context: portfolio read as "resume on a website". Studied benscott.dev
-  (2026-10-06): interactive connecting-dots canvas hero, sticky nav with
-  anchor journey, accent-highlight headings, alternating visual project
-  showcases, icon skill grid, staggered entrances.
+- Context: portfolio read as "resume on a website". Creative-portfolio
+  patterns considered (2026-10-06): interactive connecting-dots canvas,
+  sticky nav with anchor journey, accent-highlight headings, alternating
+  visual project showcases, icon skill grid, staggered entrances.
 - Adopted, adapted to MASTER.md (no framework, transform/opacity only,
   AA contrast, reduced-motion safe):
   1. Interactive constellation canvas in the hero — dots + proximity
@@ -203,3 +203,20 @@ Newest last. Each entry: context, decision, why, what was rejected.
   section (hero only — "decorative clutter" anti-pattern).
 - Resume.pdf committed to frontend/ (78 KB, self-hosted) and linked
   from hero, nav and terminal.
+
+## ADR-020: Creative layer revisions (same day, post first user review)
+
+- Constellation moves from hero-scoped to fixed full-viewport page
+  background (z-index -1 above aurora); pointer tracked on window; pause
+  only on hidden tab. Rationale: hero-only read as a framed widget; the
+  network should be the page's atmosphere.
+- Hero visitor pill removed. Counter stays footer-only (ADR-018 bot
+  filter unchanged). The hero tells the story; the footer shows the
+  number.
+- Every home section fills the window: min-height calc(100svh - 56px),
+  flex-centered; taller content extends naturally. Home gains Blog and
+  Resume sections so the sticky-nav journey is complete: Summary,
+  Experience, Projects, Skills, Blog, Resume. Education folds into the
+  Resume section (it is resume content).
+- The PDF is labeled exactly "Resume" everywhere (nav, hero, footer,
+  terminal). No "PDF" qualifiers in labels.

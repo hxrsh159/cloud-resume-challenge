@@ -50,13 +50,13 @@ Site repositioned from "resume posted online" to "portfolio":
 - Publishing workflow: write frontend/blog/<slug>.html (copy post shell),
   add card to blog/index.html, add <url> to sitemap.xml, push.
 
-## 2026-10-06: Creative layer shipped (ADR-019, benscott.dev reference)
+## 2026-10-06: Creative layer shipped (ADR-019)
 
-Study: benscott.dev — canvas constellation hero, sticky anchor nav,
-accent-highlight headings, alternating visual project showcases, icon
-skill grid, staggered entrances. Adopted/adapted per ADR-019; skipped
-icon skill grid (logo licensing chore), contact form (needs backend),
-full-page canvas (clutter anti-pattern).
+Reference study of creative dev portfolios — canvas constellation,
+sticky anchor nav, accent-highlight headings, alternating visual project
+showcases, icon skill grid, staggered entrances. Adopted/adapted per
+ADR-019; skipped icon skill grid (logo licensing chore), contact form
+(needs backend).
 
 Shipped (all verified locally + live on theozdev.com):
 - constellation.js: hero canvas, dots+proximity links+pointer attract,
