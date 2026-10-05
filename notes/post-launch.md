@@ -50,8 +50,41 @@ Site repositioned from "resume posted online" to "portfolio":
 - Publishing workflow: write frontend/blog/<slug>.html (copy post shell),
   add card to blog/index.html, add <url> to sitemap.xml, push.
 
-## 2026-10-06: Creative UI exploration (benscott.dev reference)
+## 2026-10-06: Creative layer shipped (ADR-019, benscott.dev reference)
 
-Goal: evolve beyond "resume on a website" toward a creative dev
-portfolio. Reference study: benscott.dev (creative front-end developer
-portfolio). Direction TBD with user; design-system-first per ADR-016.
+Study: benscott.dev — canvas constellation hero, sticky anchor nav,
+accent-highlight headings, alternating visual project showcases, icon
+skill grid, staggered entrances. Adopted/adapted per ADR-019; skipped
+icon skill grid (logo licensing chore), contact form (needs backend),
+full-page canvas (clutter anti-pattern).
+
+Shipped (all verified locally + live on theozdev.com):
+- constellation.js: hero canvas, dots+proximity links+pointer attract,
+  CSS-var palette (theme-aware), DPR cap 2, ~1 dot/9000px^2 (max 120),
+  rAF paused off-screen/hidden tab, static frame on reduced-motion.
+- Sticky nav (56px, blur): wordmark, Experience/Projects/Skills anchors
+  with IntersectionObserver active state, Blog, Resume (resume.pdf new
+  tab), terminal + theme toggle; 2px accent scroll-progress bar.
+  Section anchors hidden <=600px.
+- Entrance: body.loaded staggered fly-in (60ms steps); h2 accent
+  underline sweep on reveal; magnetic CTAs (pointer:fine, 4px max).
+- terminal.js: backtick or ">_" opens shell overlay; help/whoami/skills/
+  resume/visitors/ping/theme/clear/exit; history arrows; Esc closes.
+  NOTE: visitors/ping hit the live API — CORS allowlist means they fail
+  on localhost by design (works from theozdev.com origins).
+- Hero visitor pill: "You're visitor #N — served live by this site's
+  Rust API" (hidden for bots, ADR-018; no em-dash in hero).
+- Projects: .showcase two-column with inline SVG architecture diagram
+  (You->Firebase CDN + Cloud Run->Firestore, GitHub WIF edge), links to
+  source + build-log post.
+- resume.pdf (78 KB) self-hosted; linked hero/nav/footer/terminal.
+- favicon.svg (>_ on dark rounded square) + favicon-32.png via magick;
+  link tags on all 3 pages.
+- Gotcha fixed: .terminal-overlay display:flex overrode the hidden
+  attribute -> [hidden]{display:none} guard added.
+- Gotcha: Chrome desktop min window width ~500px faked mobile overflow;
+  real 375px test must use device emulation, not window resize.
+- Verified: 0 console errors; dark/light/mobile screenshots; terminal
+  E2E; blog shell consistent; pipeline run 37381913406 green; live
+  routes + content types all 200 (HTML CDN cache max-age=3600 — warm
+  browsers may show old shell for up to an hour).
