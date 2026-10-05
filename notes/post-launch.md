@@ -106,3 +106,21 @@ Shipped (all verified locally + live on theozdev.com):
 - Verified locally (0 console errors, dark/mobile screenshots, no
   horizontal overflow at 375px emulation) and live via DOM assertions +
   screenshot. Pipeline run 37383536335 green.
+
+## 2026-10-06 (constellation fix, ADR-021)
+
+User review: "still not like the reference." Root-caused by reading the
+reference's actual minified JS (not guessing): the character comes from
+REVEAL behavior, not static web — links form only between dots within
+d_radius of the cursor, alpha fades to the radius edge, dot alpha fades
+to zero beyond width/1.7 (no floor), and the cursor is a node
+(array[0] follows the mouse). Parameters lifted from their source:
+600/575/500/300/200/100 dots by width tier, link 70/60/55px, d_radius
+300/280/250, lineWidth 0.3, dot radius 0-1.5, velocity ±0.5 bounce.
+Palette stays ours (CSS vars): 4/5 glow-blue + 1/5 accent pop dots,
+glow-blue links. Also removed the 48px grid overlay (competed with the
+links). Side-by-side screenshots at 1440x900 with the same synthetic
+pointer position confirm matching character; live verified (computed
+backgroundImage: none; pipeline 37385407294 green).
+Lesson: when a user says "make it like X", read X's source first —
+visual guessing produced a statically-visible web, the wrong metaphor.
