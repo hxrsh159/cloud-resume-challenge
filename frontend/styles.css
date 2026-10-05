@@ -140,10 +140,8 @@ body {
   z-index: -1;
   pointer-events: none;
   overflow: hidden;
-  background-image:
-    linear-gradient(rgba(148, 163, 184, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
-  background-size: 48px 48px;
+  /* grid overlay removed 2026-10-06 (ADR-021): it competed with the
+     constellation links; blobs remain the only aurora texture */
 }
 .blob {
   position: absolute;

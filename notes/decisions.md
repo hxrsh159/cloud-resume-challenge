@@ -220,3 +220,20 @@ Newest last. Each entry: context, decision, why, what was rejected.
   Resume section (it is resume content).
 - The PDF is labeled exactly "Resume" everywhere (nav, hero, footer,
   terminal). No "PDF" qualifiers in labels.
+
+## ADR-021: Constellation feel — match the reference behavior exactly
+
+- First pass read as "stringy web everywhere"; the reference's character
+  comes from three behaviors we now replicate: (1) links form ONLY
+  between dots within d_radius of the pointer — the network reveals
+  around the cursor; (2) link/dot alpha fade with pointer distance
+  (dots fully invisible beyond width/1.7 — no floor); (3) the cursor is
+  itself a node (dots[0] follows it).
+- Parameters from the reference's own source: 600/575/500/300/200/100
+  dots by viewport width tier; link distance 70/60/55px; d_radius
+  300/280/250; lineWidth 0.3; dot radius 0-1.5px; velocity ±0.5,
+  bounce at edges. Palette stays ours (CSS vars): 4/5 glow-blue dots,
+  1/5 accent pop; links glow-blue.
+- The 48px grid overlay was removed from .aurora — it competed with
+  constellation links on a texture level. Aurora blobs stay.
+- Mobile (<=800px): dots only, no links (same as reference tiers).

@@ -60,12 +60,18 @@ Avoid: slow performance. All animation must be transform/opacity only
 ## Creative layer (added 2026-10-06, ADR-019; revised ADR-020)
 
 - Constellation canvas: position:fixed full-viewport page background
-  (z-index -1, after .aurora so it paints above blobs, below content);
-  dots + proximity links + pointer attraction tracked on window; colors
-  from CSS vars (theme-aware, lines <= 0.35 alpha); DPR-aware; density
-  ~1 dot / 9000px^2 of viewport, capped 120; rAF paused only when the
-  tab is hidden (always on-screen otherwise); one static frame under
-  prefers-reduced-motion.
+  (z-index -1, after .aurora so it paints above blobs, below content).
+  Behavior (revised 2026-10-06, ADR-021): the network REVEALS around the
+  cursor — links are drawn only between dots within d_radius of the
+  pointer, with alpha fading to the radius edge; dot alpha also fades
+  with pointer distance. Cursor itself is a node (dots[0] follows it).
+  Dots: radius 0-1.5px, 4/5 --color-glow-blue + 1/5 --color-accent
+  (theme-aware via CSS vars); links: --color-glow-blue, lineWidth 0.3.
+  Density by viewport width: >1600: 600 dots/link 70px/radius 300;
+  >1300: 575/60/280; >1100: 500/55/250; >800: 300 dots, no links;
+  >600: 200; else 100. Velocity ±0.5 px/frame, bounce at edges.
+  DPR-aware; rAF paused on hidden tab; one static frame (pointer
+  centered) under prefers-reduced-motion.
 - Full-viewport sections (ADR-020): each main section fills the window —
   min-height: calc(100svh - 56px), flex column, content vertically
   centered; taller content (Experience) simply extends the section.

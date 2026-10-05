@@ -1,8 +1,10 @@
 // Constellation page background — spec: design-system/theozdev/pages/index.md
-// (creative layer, ADR-019/020). Fixed full-viewport canvas behind all
-// content: dots + proximity links + pointer attraction. Theme-aware (reads
-// CSS vars), DPR-aware, pauses on hidden tab, one static frame under
-// prefers-reduced-motion.
+// (creative layer, ADR-019/020/021). Fixed full-viewport canvas behind all
+// content. The network reveals around the pointer: links only form between
+// dots inside the pointer radius, and both link and dot alpha fade with
+// pointer distance. The pointer itself is a node in the graph.
+// Theme-aware (reads CSS vars), DPR-aware, pauses on hidden tab, one static
+// frame under prefers-reduced-motion.
 
 (function () {
   "use strict";
@@ -13,23 +15,53 @@
   var prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var ctx = canvas.getContext("2d");
 
-  var LINK_DIST = 130;      // px: max distance for a link
-  var POINTER_DIST = 170;   // px: pointer attraction radius
-  var MAX_DOTS = 120;
-  var DENSITY = 9000;       // px^2 per dot
-
+  var W = 0, H = 0, DPR = 1;
   var dots = [];
-  var pointer = { x: -9999, y: -9999 };
   var running = false;
   var rafId = null;
-  var W = 0, H = 0, DPR = 1;
 
-  function colors() {
+  // density/behavior tiers by viewport width (spec: pages/index.md)
+  function tier() {
+    var w = window.innerWidth;
+    if (w > 1600) return { nb: 600, distance: 70, dRadius: 300 };
+    if (w > 1300) return { nb: 575, distance: 60, dRadius: 280 };
+    if (w > 1100) return { nb: 500, distance: 55, dRadius: 250 };
+    if (w > 800)  return { nb: 300, distance: 0, dRadius: 0 };
+    if (w > 600)  return { nb: 200, distance: 0, dRadius: 0 };
+    return { nb: 100, distance: 0, dRadius: 0 };
+  }
+  var cfg = tier();
+
+  // pointer: defaults to viewport center, keeps last-known position
+  var pointer = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+
+  function palette() {
     var cs = getComputedStyle(document.documentElement);
     return {
-      dot: cs.getPropertyValue("--color-accent").trim() || "#22C55E",
-      line: cs.getPropertyValue("--color-muted-foreground").trim() || "#94A3B8"
+      blue: cs.getPropertyValue("--color-glow-blue").trim() || "#2563EB",
+      accent: cs.getPropertyValue("--color-accent").trim() || "#22C55E"
     };
+  }
+
+  function rgbComponents(hex) {
+    var h = hex.replace("#", "");
+    if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+    var n = parseInt(h, 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  }
+
+  var dotColors = []; // per-dot rgb triplets, 4/5 blue + 1/5 accent
+  var linkRGB = [37, 99, 235];
+
+  function buildPalette() {
+    var p = palette();
+    linkRGB = rgbComponents(p.blue);
+    var blue = rgbComponents(p.blue);
+    var accent = rgbComponents(p.accent);
+    dotColors = dots.map(function (_, i) {
+      // deterministic-ish: every 5th dot is the accent pop
+      return (i % 5 === 4) ? accent : blue;
+    });
   }
 
   function resize() {
@@ -39,76 +71,85 @@
     canvas.width = W * DPR;
     canvas.height = H * DPR;
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    cfg = tier();
     seed();
+    buildPalette();
     if (prefersReduced) draw();
   }
 
   function seed() {
-    var n = Math.min(MAX_DOTS, Math.floor((W * H) / DENSITY));
     dots = [];
-    for (var i = 0; i < n; i++) {
+    for (var i = 0; i < cfg.nb; i++) {
       dots.push({
         x: Math.random() * W,
         y: Math.random() * H,
-        vx: (Math.random() - 0.5) * 0.35,
-        vy: (Math.random() - 0.5) * 0.35,
-        r: 1 + Math.random() * 1.6
+        vx: -0.5 + Math.random(),
+        vy: -0.5 + Math.random(),
+        r: 1.5 * Math.random()
       });
     }
   }
 
   function step() {
-    for (var i = 0; i < dots.length; i++) {
+    for (var i = 1; i < dots.length; i++) {
       var d = dots[i];
-      // gentle pointer attraction
-      var pdx = pointer.x - d.x, pdy = pointer.y - d.y;
-      var pd = Math.sqrt(pdx * pdx + pdy * pdy);
-      if (pd < POINTER_DIST && pd > 0.01) {
-        d.vx += (pdx / pd) * 0.012;
-        d.vy += (pdy / pd) * 0.012;
-      }
+      // bounce at edges
+      if (d.y < 0 || d.y > H) d.vy = -d.vy;
+      if (d.x < 0 || d.x > W) d.vx = -d.vx;
       d.x += d.vx;
       d.y += d.vy;
-      // soft speed cap + drift floor
-      d.vx *= 0.995;
-      d.vy *= 0.995;
-      if (Math.abs(d.vx) < 0.08) d.vx += (Math.random() - 0.5) * 0.02;
-      if (Math.abs(d.vy) < 0.08) d.vy += (Math.random() - 0.5) * 0.02;
-      // wrap edges
-      if (d.x < -10) d.x = W + 10; else if (d.x > W + 10) d.x = -10;
-      if (d.y < -10) d.y = H + 10; else if (d.y > H + 10) d.y = -10;
+    }
+    // pointer is a node
+    if (dots.length) {
+      dots[0].x = pointer.x;
+      dots[0].y = pointer.y;
     }
   }
 
   function draw() {
-    var c = colors();
     ctx.clearRect(0, 0, W, H);
-    // links
-    for (var i = 0; i < dots.length; i++) {
-      for (var j = i + 1; j < dots.length; j++) {
-        var dx = dots[i].x - dots[j].x;
-        var dy = dots[i].y - dots[j].y;
-        var dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < LINK_DIST) {
-          ctx.strokeStyle = c.line;
-          ctx.globalAlpha = (1 - dist / LINK_DIST) * 0.35;
-          ctx.lineWidth = 1;
+
+    // links: only between dots that are both near the pointer
+    if (cfg.distance > 0) {
+      ctx.lineWidth = 0.3;
+      for (var i = 0; i < dots.length; i++) {
+        var a = dots[i];
+        var adx = a.x - pointer.x, ady = a.y - pointer.y;
+        if (adx > cfg.dRadius || adx < -cfg.dRadius || ady > cfg.dRadius || ady < -cfg.dRadius) continue;
+        for (var j = i + 1; j < dots.length; j++) {
+          var b = dots[j];
+          var dx = a.x - b.x, dy = a.y - b.y;
+          if (dx > cfg.distance || dx < -cfg.distance || dy > cfg.distance || dy < -cfg.distance) continue;
+          var bdx = b.x - pointer.x, bdy = b.y - pointer.y;
+          if (bdx > cfg.dRadius || bdx < -cfg.dRadius || bdy > cfg.dRadius || bdy < -cfg.dRadius) continue;
+          // alpha fades toward the radius edge
+          var e = Math.sqrt(adx * adx + ady * ady) / cfg.dRadius - 0.3;
+          if (e < 0) e = 0;
+          var alpha = 1 - e;
+          if (alpha <= 0) continue;
+          ctx.strokeStyle = "rgba(" + linkRGB[0] + "," + linkRGB[1] + "," + linkRGB[2] + "," + alpha + ")";
           ctx.beginPath();
-          ctx.moveTo(dots[i].x, dots[i].y);
-          ctx.lineTo(dots[j].x, dots[j].y);
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
           ctx.stroke();
         }
       }
     }
-    // dots
-    ctx.fillStyle = c.dot;
+
+    // dots: alpha fades with pointer distance; beyond the falloff radius
+    // dots are invisible — the cursor region is the active zone
+    var falloff = W / 1.7;
     for (var k = 0; k < dots.length; k++) {
-      ctx.globalAlpha = 0.75;
+      var d = dots[k];
+      var c = dotColors[k] || linkRGB;
+      var ddx = d.x - pointer.x, ddy = d.y - pointer.y;
+      var alpha2 = 1 - Math.sqrt(ddx * ddx + ddy * ddy) / falloff;
+      if (alpha2 <= 0) continue;
+      ctx.fillStyle = "rgba(" + c[0] + "," + c[1] + "," + c[2] + "," + alpha2 + ")";
       ctx.beginPath();
-      ctx.arc(dots[k].x, dots[k].y, dots[k].r, 0, Math.PI * 2);
+      ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
       ctx.fill();
     }
-    ctx.globalAlpha = 1;
   }
 
   function loop() {
@@ -133,7 +174,6 @@
   resize();
   if (prefersReduced) return; // static frame drawn in resize()
 
-  // full-viewport background: only pause when the tab is hidden
   document.addEventListener("visibilitychange", function () {
     document.hidden ? stop() : start();
   });
@@ -142,10 +182,7 @@
     pointer.x = e.clientX;
     pointer.y = e.clientY;
   }, { passive: true });
-  document.addEventListener("pointerleave", function () {
-    pointer.x = -9999;
-    pointer.y = -9999;
-  });
+  // keep last-known pointer position on leave (dots settle, network rests)
 
   var resizeTimer;
   window.addEventListener("resize", function () {
@@ -153,9 +190,11 @@
     resizeTimer = setTimeout(resize, 150);
   });
 
-  // redraw with new palette after a theme flip
+  // repaint with the new palette after a theme flip
   var toggle = document.querySelector(".theme-toggle");
-  if (toggle) toggle.addEventListener("click", function () { setTimeout(draw, 50); });
+  if (toggle) toggle.addEventListener("click", function () {
+    setTimeout(function () { buildPalette(); draw(); }, 50);
+  });
 
   start();
 })();
