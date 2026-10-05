@@ -12,15 +12,22 @@ function isBot() {
 
 async function updateVisitorCounter() {
   const el = document.getElementById("visitor-counter");
-  if (isBot()) return; // leaves the "—" placeholder
+  const heroPill = document.getElementById("hero-counter");
+  const heroN = document.getElementById("hero-counter-n");
+  if (isBot()) return; // footer keeps "—", hero pill stays hidden (ADR-018/019)
   try {
     const res = await fetch(`${API_URL}/api/visitors`, { method: "GET" });
     if (!res.ok) throw new Error(`API responded ${res.status}`);
     const data = await res.json();
-    el.textContent = data.count.toLocaleString();
+    const pretty = data.count.toLocaleString();
+    if (el) el.textContent = pretty;
+    if (heroPill && heroN) {
+      heroN.textContent = "#" + pretty;
+      heroPill.hidden = false;
+    }
   } catch (err) {
     console.warn("Visitor counter unavailable:", err);
-    el.textContent = "unavailable";
+    if (el) el.textContent = "unavailable";
   }
 }
 

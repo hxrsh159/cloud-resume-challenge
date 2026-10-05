@@ -169,3 +169,37 @@ Newest last. Each entry: context, decision, why, what was rejected.
   public (ADR-012); we just stop paying writes for non-humans.
 - Note: headless-Chromium E2E checks now observe the placeholder by design;
   counter verification uses the API directly.
+
+## ADR-019: Creative layer (benscott.dev study) — what we adopt, what we skip
+
+- Context: portfolio read as "resume on a website". Studied benscott.dev
+  (2026-10-06): interactive connecting-dots canvas hero, sticky nav with
+  anchor journey, accent-highlight headings, alternating visual project
+  showcases, icon skill grid, staggered entrances.
+- Adopted, adapted to MASTER.md (no framework, transform/opacity only,
+  AA contrast, reduced-motion safe):
+  1. Interactive constellation canvas in the hero — dots + proximity
+     links, pointer-reactive; palette from CSS vars (theme-aware);
+     density scales with area; paused off-screen/hidden tab; static
+     under prefers-reduced-motion. Fits the network/cloud identity.
+  2. Sticky top nav: wordmark, section anchors (Experience, Projects,
+     Skills), Blog, Resume (PDF), theme toggle (moved out of hero);
+     2px scroll-progress bar; active section highlighted via
+     IntersectionObserver.
+  3. Entrance motion: hero elements fly in staggered on load;
+     h2 labels get an accent underline sweep on reveal; CTAs get a
+     subtle magnetic pull (pointer-fine devices only).
+  4. Terminal easter egg: ` key or ">_" nav button opens a fake shell
+     (help/whoami/skills/resume/visitors/theme/clear/exit). System
+     monospace stack (zero assets). Esc closes.
+  5. Hero counter: "You're visitor #N" with tooltip naming the stack;
+     hidden (not em-dash) for bots per ADR-018.
+  6. Project showcase: alternating two-column panel with an inline SVG
+     architecture diagram (self-hosted per ADR-017) instead of a plain
+     job card.
+- Skipped (with reasons): icon skill grid (license-clean tech logos are
+  a maintenance/legal chore; text chips stay), contact form (needs a
+  backend endpoint; mailto suffices), full-viewport canvas on every
+  section (hero only — "decorative clutter" anti-pattern).
+- Resume.pdf committed to frontend/ (78 KB, self-hosted) and linked
+  from hero, nav and terminal.
