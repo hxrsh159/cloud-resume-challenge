@@ -49,3 +49,9 @@ Site repositioned from "resume posted online" to "portfolio":
   blog index + post screenshots, all routes 200, pipeline green.
 - Publishing workflow: write frontend/blog/<slug>.html (copy post shell),
   add card to blog/index.html, add <url> to sitemap.xml, push.
+
+## 2026-10-06: Creative UI exploration (benscott.dev reference)
+
+Goal: evolve beyond "resume on a website" toward a creative dev
+portfolio. Reference study: benscott.dev (creative front-end developer
+portfolio). Direction TBD with user; design-system-first per ADR-016.
