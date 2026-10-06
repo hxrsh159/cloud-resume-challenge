@@ -80,8 +80,8 @@ Avoid: slow performance. All animation must be transform/opacity only
   folded into the Resume section (it is resume content). Footer keeps
   natural height. Sections have scroll-margin-top: 56px so anchor
   navigation clears the fixed nav.
-- Sticky nav (56px): wordmark "harshit singh" left; anchors Summary /
-  Experience / Projects / Skills / Blog / Resume (all in-page) right;
+- Sticky nav (56px): wordmark "Welcome to Harsh's space" left; anchors
+  Summary / Experience / Projects / Skills / Blog / Resume (all in-page) right;
   theme toggle lives here (removed from hero); ">_" terminal button. 2px
   accent scroll-progress bar under nav. Active anchor gets accent color
   + 2px underline offset. Body gets padding-top 56px. Mobile (<=600px):
