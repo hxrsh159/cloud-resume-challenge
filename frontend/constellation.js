@@ -38,8 +38,9 @@
   function palette() {
     var cs = getComputedStyle(document.documentElement);
     return {
-      blue: cs.getPropertyValue("--color-glow-blue").trim() || "#2563EB",
-      accent: cs.getPropertyValue("--color-accent").trim() || "#22C55E"
+      blue: cs.getPropertyValue("--color-glow-blue").trim() || "#3B6BFF",
+      accent: cs.getPropertyValue("--color-accent").trim() || "#FFCD00",
+      red: cs.getPropertyValue("--color-flag-red").trim() || "#FF4757"
     };
   }
 
@@ -50,17 +51,19 @@
     return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
   }
 
-  var dotColors = []; // per-dot rgb triplets, 4/5 blue + 1/5 accent
-  var linkRGB = [37, 99, 235];
+  var dotColors = []; // per-dot rgb triplets: 3/5 royal, 1/5 gold, 1/5 red
+  var linkRGB = [59, 107, 255];
 
   function buildPalette() {
     var p = palette();
     linkRGB = rgbComponents(p.blue);
     var blue = rgbComponents(p.blue);
-    var accent = rgbComponents(p.accent);
+    var gold = rgbComponents(p.accent);
+    var red = rgbComponents(p.red);
     dotColors = dots.map(function (_, i) {
-      // deterministic-ish: every 5th dot is the accent pop
-      return (i % 5 === 4) ? accent : blue;
+      if (i % 5 === 3) return gold;   // cricket gold
+      if (i % 5 === 4) return red;    // flag red
+      return blue;                    // flag royal
     });
   }
 

@@ -17,6 +17,8 @@
 | Light background (#F8FAFC) | Dark Mode palette (#0F172A base) | Generator's own `developer portfolio` reasoning returns Dark Mode (OLED); dark is the norm for developer audiences. |
 | Cinzel / Josefin Sans | Inter single-family system | Generated pair is tagged "real estate, luxury" — wrong industry. `developer technical modern` typography search returns Inter System. |
 | "Product Demo + Features" page pattern | Single-page resume pattern (below) | This site has no product video; pattern mismatch in the rule DB. |
+| Generic green accent / slate navy | Australian flag + cricket gold palette | Owner identity: Australian citizen, cricket nation (ADR-023). |
+| 760px content column | 1080px | Wide screens left too much unused space (ADR-023). |
 
 Everything else (spacing, shadows, anti-patterns, checklist) is the
 generator's baseline, unchanged.
@@ -35,43 +37,58 @@ generator's baseline, unchanged.
 6. Education
 7. Footer — live visitor counter
 
-## Color Palette (dark)
+## Color Palette (dark) — Australian identity (ADR-023, 2026-10-06)
+
+Inspired by the Australian flag (royal blue, red, white) and the national
+cricket team's gold. Background is a deep navy derived from the flag's
+blue field; the accent is cricket gold; flag red is a sparing decorative
+pop (constellation dots only, never text).
 
 | Role | Hex | CSS Variable |
 |------|-----|--------------|
-| Background | `#0F172A` | `--color-background` |
-| Foreground | `#F8FAFC` | `--color-foreground` |
-| Card | `#1B2336` | `--color-card` |
-| Card Foreground | `#F8FAFC` | `--color-card-foreground` |
-| Muted | `#272F42` | `--color-muted` |
-| Muted Foreground | `#94A3B8` | `--color-muted-foreground` |
-| Border | `#334155` | `--color-border` |
-| Accent | `#22C55E` | `--color-accent` |
-| On Accent | `#0F172A` | `--color-on-accent` |
+| Background | `#0A1633` | `--color-background` |
+| Foreground | `#F4F7FF` | `--color-foreground` |
+| Card | `#111F42` | `--color-card` |
+| Card Foreground | `#F4F7FF` | `--color-card-foreground` |
+| Muted | `#1A2A52` | `--color-muted` |
+| Muted Foreground | `#9FB0D8` | `--color-muted-foreground` |
+| Border | `#2A3C6B` | `--color-border` |
+| Accent (cricket gold) | `#FFCD00` | `--color-accent` |
+| On Accent | `#0A1633` | `--color-on-accent` |
+| Glow blue (flag royal) | `#3B6BFF` | `--color-glow-blue` |
+| Flag red (decor only) | `#FF4757` | `--color-flag-red` |
 
-Contrast: foreground/background 16.9:1; muted-foreground/background 7.4:1;
-accent/background 8.1:1. All pass WCAG AA (4.5:1). Never put white text on
-the accent green (2.3:1 — fails); use `--color-on-accent`.
+Contrast: foreground/background ~17:1; muted-foreground/background ~7.3:1;
+accent/background ~10.3:1. All pass WCAG AA (4.5:1). On-accent is the navy
+background — never white text on gold.
 
-## Color Palette (light) — added 2026-09-29
+## Color Palette (light)
 
 Dark remains the default/brand. Light theme is user-selectable via toggle
-(`data-theme="light"` on <html>, persisted in localStorage). Values derive
-from the generator's original light baseline, with a deeper accent for AA:
+(`data-theme="light"` on <html>, persisted in localStorage). Gold must be
+darkened heavily for AA on white:
 
 | Role | Hex |
 |------|-----|
-| Background | `#F8FAFC` |
-| Foreground | `#0F172A` |
+| Background | `#FAFBFF` |
+| Foreground | `#0A1633` |
 | Card | `#FFFFFF` |
-| Muted | `#E9EEF5` |
-| Muted Foreground | `#475569` |
-| Border | `#CBD5E1` |
-| Accent | `#15803D` (darker green: 4.6:1 on background — AA) |
+| Muted | `#EDF1FA` |
+| Muted Foreground | `#44527A` |
+| Border | `#C6D0E8` |
+| Accent (ochre gold) | `#8A6D00` (~5.7:1 on background — AA) |
 | On Accent | `#FFFFFF` |
+| Glow blue | `#3B6BFF` |
 
 Light-theme rules: aurora blobs drop to 40% opacity; name glow and avatar
 glow removed; shadows revert to the light baseline (rgba(0,0,0,0.05-0.1)).
+
+## Layout (ADR-023)
+
+Max content width: **1080px**, centered (was 760px — widened after user
+feedback that content used too little of wide screens). Prose blocks cap
+at ~72ch for readable measure. Base font steps to 17px at viewports
+>= 1400px (rem tokens scale with it).
 
 ## Typography — Inter System
 
@@ -97,7 +114,7 @@ glow removed; shadows revert to the light baseline (rgba(0,0,0,0.05-0.1)).
 | `--space-xl` | 2rem |
 | `--space-2xl` | 3rem |
 
-Max content width: 760px, centered.
+Max content width: 1080px, centered (see Layout, ADR-023).
 
 ## Shadows (dark-mode values — deeper than the light baseline)
 

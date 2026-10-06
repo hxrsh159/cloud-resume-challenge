@@ -249,3 +249,20 @@ Newest last. Each entry: context, decision, why, what was rejected.
   hero, summary, experience, projects, skills, blog, resume.
 - Added scroll-margin-top: 56px on sections so anchor navigation from
   the fixed nav lands with the section top clear of the bar.
+
+## ADR-023: Australian identity palette + wider layout
+
+- Palette (user request): Australian flag (royal blue field, red, white)
+  + the national cricket team's gold. Dark background becomes flag-
+  derived navy #0A1633; accent becomes cricket gold #FFCD00 (10.3:1 —
+  AA); links/glow become royal #3B6BFF; flag red #FF4757 is decorative
+  only (constellation dots). Light theme: gold darkens to ochre #8A6D00
+  (5.7:1 — AA). Contrast re-verified for every text role in MASTER.md.
+- Constellation dots now mix 3/5 royal blue, 1/5 gold, 1/5 red (was
+  4/5 blue + 1/5 accent).
+- Layout: content column 760 -> 1080px (user: "content should take more
+  page space"); prose blocks cap at 72ch for measure; base font 17px at
+  >=1400px (rem tokens scale). Timeline cards, showcase and skills grid
+  use the full width.
+- Hero Resume button removed (nav Resume anchor + Resume-section button
+  remain the PDF paths).

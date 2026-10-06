@@ -6,14 +6,14 @@
 /* Light theme (MASTER.md "Color Palette (light)"). Applied via
    data-theme="light" on <html>; dark :root below stays the default. */
 :root[data-theme="light"] {
-  --color-background: #F8FAFC;
-  --color-foreground: #0F172A;
+  --color-background: #FAFBFF;
+  --color-foreground: #0A1633;
   --color-card: #FFFFFF;
-  --color-card-foreground: #0F172A;
-  --color-muted: #E9EEF5;
-  --color-muted-foreground: #475569;
-  --color-border: #CBD5E1;
-  --color-accent: #15803D;
+  --color-card-foreground: #0A1633;
+  --color-muted: #EDF1FA;
+  --color-muted-foreground: #44527A;
+  --color-border: #C6D0E8;
+  --color-accent: #8A6D00;
   --color-on-accent: #FFFFFF;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -24,16 +24,18 @@
 :root[data-theme="light"] .avatar { box-shadow: none; }
 
 :root {
-  --color-glow-blue: #2563EB; /* pages/index.md override: secondary aurora glow */
-  --color-background: #0F172A;
-  --color-foreground: #F8FAFC;
-  --color-card: #1B2336;
-  --color-card-foreground: #F8FAFC;
-  --color-muted: #272F42;
-  --color-muted-foreground: #94A3B8;
-  --color-border: #334155;
-  --color-accent: #22C55E;
-  --color-on-accent: #0F172A;
+  /* Australian identity palette (MASTER.md, ADR-023) */
+  --color-glow-blue: #3B6BFF;   /* flag royal blue */
+  --color-flag-red: #FF4757;    /* decorative dots only, never text */
+  --color-background: #0A1633;  /* flag-derived navy */
+  --color-foreground: #F4F7FF;
+  --color-card: #111F42;
+  --color-card-foreground: #F4F7FF;
+  --color-muted: #1A2A52;
+  --color-muted-foreground: #9FB0D8;
+  --color-border: #2A3C6B;
+  --color-accent: #FFCD00;      /* cricket gold */
+  --color-on-accent: #0A1633;
 
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
@@ -128,9 +130,19 @@ body {
 }
 
 .container {
-  max-width: 760px;
+  max-width: 1080px; /* MASTER.md Layout (ADR-023) */
   margin: 0 auto;
   padding: 0 var(--space-lg);
+}
+
+/* Prose keeps a readable measure inside the wider column */
+#summary p, .showcase-text, .resume-block {
+  max-width: 72ch;
+}
+
+/* Wide screens: modest type bump (rem tokens scale with it) */
+@media (min-width: 1400px) {
+  body { font-size: 17px; }
 }
 
 /* --- Aurora background (pages/index.md) --- */
@@ -153,13 +165,13 @@ body {
 .blob-a {
   top: -20%;
   right: -15%;
-  background: radial-gradient(circle, rgba(34, 197, 94, 0.12), transparent 65%);
+  background: radial-gradient(circle, rgba(255, 205, 0, 0.10), transparent 65%);
   animation: drift-a 44s ease-in-out infinite alternate;
 }
 .blob-b {
   bottom: -25%;
   left: -15%;
-  background: radial-gradient(circle, rgba(37, 99, 235, 0.10), transparent 65%);
+  background: radial-gradient(circle, rgba(59, 107, 255, 0.12), transparent 65%);
   animation: drift-b 52s ease-in-out infinite alternate;
 }
 @keyframes drift-a {
@@ -227,7 +239,7 @@ body.loaded .fly-in:nth-child(5) { transition-delay: 240ms; }
   height: 128px;
   border-radius: 50%;
   border: 3px solid var(--color-accent);
-  box-shadow: 0 0 24px rgba(34, 197, 94, 0.35);
+  box-shadow: 0 0 24px rgba(255, 205, 0, 0.35);
   flex-shrink: 0;
 }
 .hero h1 {
@@ -235,7 +247,7 @@ body.loaded .fly-in:nth-child(5) { transition-delay: 240ms; }
   font-weight: 700;
   letter-spacing: -0.015em;
   font-size: 2.5rem;
-  text-shadow: 0 0 10px rgba(34, 197, 94, 0.35);
+  text-shadow: 0 0 10px rgba(255, 205, 0, 0.30);
 }
 .tagline {
   color: var(--color-muted-foreground);

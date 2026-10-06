@@ -65,8 +65,9 @@ Avoid: slow performance. All animation must be transform/opacity only
   cursor — links are drawn only between dots within d_radius of the
   pointer, with alpha fading to the radius edge; dot alpha also fades
   with pointer distance. Cursor itself is a node (dots[0] follows it).
-  Dots: radius 0-1.5px, 4/5 --color-glow-blue + 1/5 --color-accent
-  (theme-aware via CSS vars); links: --color-glow-blue, lineWidth 0.3.
+  Dots: radius 0-1.5px, 3/5 --color-glow-blue (flag royal) + 1/5
+  --color-accent (cricket gold) + 1/5 --color-flag-red (ADR-023);
+  links: --color-glow-blue, lineWidth 0.3.
   Density by viewport width: >1600: 600 dots/link 70px/radius 300;
   >1300: 575/60/280; >1100: 500/55/250; >800: 300 dots, no links;
   >600: 200; else 100. Velocity ±0.5 px/frame, bounce at edges.
