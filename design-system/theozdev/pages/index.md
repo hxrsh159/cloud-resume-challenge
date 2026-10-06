@@ -72,12 +72,14 @@ Avoid: slow performance. All animation must be transform/opacity only
   >600: 200; else 100. Velocity ±0.5 px/frame, bounce at edges.
   DPR-aware; rAF paused on hidden tab; one static frame (pointer
   centered) under prefers-reduced-motion.
-- Full-viewport sections (ADR-020): each main section fills the window —
-  min-height: calc(100svh - 56px), flex column, content vertically
-  centered; taller content (Experience) simply extends the section.
-  Sections: Summary, Experience, Projects (showcase), Skills, Blog,
-  Resume. Education folded into the Resume section (it is resume
-  content). Footer keeps natural height.
+- Full-viewport sections (ADR-020/022): the page is a uniform stack of
+  full-window screens, including the hero — min-height:
+  calc(100svh - 56px), flex-centered content; taller content
+  (Experience) simply extends the section. Sections: hero, Summary,
+  Experience, Projects (showcase), Skills, Blog, Resume. Education
+  folded into the Resume section (it is resume content). Footer keeps
+  natural height. Sections have scroll-margin-top: 56px so anchor
+  navigation clears the fixed nav.
 - Sticky nav (56px): wordmark "harshit singh" left; anchors Summary /
   Experience / Projects / Skills / Blog / Resume (all in-page) right;
   theme toggle lives here (removed from hero); ">_" terminal button. 2px

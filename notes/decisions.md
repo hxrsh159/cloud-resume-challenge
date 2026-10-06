@@ -237,3 +237,15 @@ Newest last. Each entry: context, decision, why, what was rejected.
 - The 48px grid overlay was removed from .aurora — it competed with
   constellation links on a texture level. Aurora blobs stay.
 - Mobile (<=800px): dots only, no links (same as reference tiers).
+
+## ADR-022: Even screen division — hero is a full screen too
+
+- Problem (user screenshot): hero was natural height (~25% of the
+  window) while each section was 100svh, so the first section's
+  centered content landed far below the fold — dead space, uneven
+  division.
+- Fix: .hero also gets min-height calc(100svh - 56px) with flex
+  centering, making the page a uniform stack of full-window screens:
+  hero, summary, experience, projects, skills, blog, resume.
+- Added scroll-margin-top: 56px on sections so anchor navigation from
+  the fixed nav lands with the section top clear of the bar.
