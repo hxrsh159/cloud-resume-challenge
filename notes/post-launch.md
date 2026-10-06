@@ -140,3 +140,22 @@ selects the mobile dot tier) — ALWAYS verify layout via CDP viewport
 emulation, never window resize.
 Also: "condensed to two pages" resume copy tweak shipped (run
 37386646716).
+
+## 2026-10-06 (Australian palette + wide layout, ADR-023)
+
+User requests: content uses too little page space; palette should evoke
+the Australian flag + cricket-team gold; remove hero Resume button.
+- Palette (MASTER.md rewritten, contrast re-verified): dark bg #0A1633
+  (flag navy), accent #FFCD00 cricket gold (10.3:1), glow #3B6BFF royal,
+  #FF4757 flag red = constellation dots only (never text). Light theme:
+  navy ink, ochre gold #8A6D00 (5.7:1). Aurora blobs gold + royal;
+  avatar/h1 glow gold.
+- Constellation dots: 3/5 royal, 1/5 gold, 1/5 red.
+- Layout: .container 760 -> 1080px; prose caps 72ch (#summary p,
+  .showcase-text, .resume-block); body 17px at >=1400px (rem scales).
+- Hero Resume button removed; PDF paths remain nav anchor, resume-
+  section CTA, footer link, terminal command.
+- Verified: dark/light screenshots at emulated 1920x940, live DOM
+  assertions (accent #FFCD00, bg #0A1633, container 1080, hero button
+  absent); pipeline 37430576241 green.
+- Wordmark changed to "Welcome to Harsh's space" (run 37415636588).
