@@ -159,3 +159,13 @@ the Australian flag + cricket-team gold; remove hero Resume button.
   assertions (accent #FFCD00, bg #0A1633, container 1080, hero button
   absent); pipeline 37430576241 green.
 - Wordmark changed to "Welcome to Harsh's space" (run 37415636588).
+
+## 2026-10-06 (clean URLs, ADR-024)
+
+User: "can't we omit the #xyz part of the URL?" Nav anchors now
+scrollIntoView with preventDefault (smooth unless reduced motion) — the
+address bar stays clean on in-page navigation. Incoming deep links
+(blog -> /#experience) still jump natively, hash stripped via
+replaceState after 1.5s. Verified: click nav -> URL unchanged; cold
+load /#skills -> jumps, then URL cleans. Trade-off accepted: address
+bar no longer exposes shareable section URLs.
