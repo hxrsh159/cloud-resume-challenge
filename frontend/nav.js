@@ -12,6 +12,25 @@
     document.body.classList.add("loaded");
   });
 
+  // --- Clean URLs (ADR-024): in-page anchor clicks scroll smoothly
+  // without setting the location hash; incoming deep links (e.g.
+  // /#experience from the blog) still jump, then the hash is stripped.
+  Array.prototype.forEach.call(document.querySelectorAll('a[href^="#"]'), function (a) {
+    a.addEventListener("click", function (e) {
+      var id = (a.getAttribute("href") || "").slice(1);
+      var target = id && document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      target.scrollIntoView({ behavior: prefersReduced ? "auto" : "smooth" });
+      if (location.hash) history.replaceState(null, "", location.pathname);
+    });
+  });
+  if (location.hash) {
+    setTimeout(function () {
+      history.replaceState(null, "", location.pathname);
+    }, 1500);
+  }
+
   // --- Scroll progress bar ---
   var bar = document.querySelector(".scroll-progress");
   if (bar) {

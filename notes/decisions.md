@@ -266,3 +266,14 @@ Newest last. Each entry: context, decision, why, what was rejected.
   use the full width.
 - Hero Resume button removed (nav Resume anchor + Resume-section button
   remain the PDF paths).
+
+## ADR-024: Clean URLs — no #fragment clutter
+
+- Nav anchors now scroll via JS (scrollIntoView, smooth unless reduced
+  motion) with preventDefault, so the address bar stays clean (no
+  /#summary, /#top, ...). Incoming deep links (blog -> /#experience)
+  still jump natively on load; the hash is stripped via
+  history.replaceState 1.5s later.
+- Trade-off (accepted): section URLs are no longer shareable by copying
+  the address bar; deep links into the page keep working when visited
+  from outside.
