@@ -73,7 +73,10 @@ emojis, no verbosity. Facts, reasons, commands.
 
 Post-launch features (see post-launch.md): portfolio UI revamp, real
 avatar, dark/light theme toggle, blog (/blog/), SEO foundations
-(robots/sitemap/og/JSON-LD).
+(robots/sitemap/og/JSON-LD), creative layer (ADR-019..024): full-page
+reveal constellation, sticky nav + full-window sections, terminal
+easter egg, project showcase, self-hosted resume.pdf, Australian
+flag + cricket-gold palette, 1080px layout, clean URLs.
 
 Maintenance: push to main deploys automatically. New blog post = new
 frontend/blog/<slug>.html + card in blog/index.html + sitemap entry.
