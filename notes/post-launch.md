@@ -124,3 +124,19 @@ pointer position confirm matching character; live verified (computed
 backgroundImage: none; pipeline 37385407294 green).
 Lesson: when a user says "make it like X", read X's source first —
 visual guessing produced a statically-visible web, the wrong metaphor.
+
+## 2026-10-06 (even screen division, ADR-022)
+
+User screenshot: hero was natural height (~25% of window) while sections
+were 100svh — Summary's centered content landed far below the fold:
+dead space, uneven division. Fix: hero is a full screen too
+(min-height calc(100svh - 56px), flex-centered), so the page is a
+uniform stack: hero, summary, experience, projects, skills, blog,
+resume. Added scroll-margin-top: 56px on sections (anchors clear the
+fixed nav). Verified at emulated 1920x940: hero 884 + 56 nav = 940
+exactly; anchor lands at section top; pipeline 37414837284 green.
+Gotcha reconfirmed: headless window resize floors at ~700px (silently
+selects the mobile dot tier) — ALWAYS verify layout via CDP viewport
+emulation, never window resize.
+Also: "condensed to two pages" resume copy tweak shipped (run
+37386646716).
