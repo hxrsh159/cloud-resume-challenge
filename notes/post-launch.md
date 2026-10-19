@@ -192,7 +192,7 @@ Audit findings fixed (issue-by-issue):
 - firestore.tf: deletion_policy flipped to PREVENT (live counter data;
   destroy now fails on purpose).
 - Billing budget codified: terraform/budget.tf (ADR-013 addendum).
-  One-time bootstrap required: grant github-ci roles/billing.budgetsWriter
+  One-time bootstrap required: grant github-ci roles/billing.costsManager
   on the billing account, delete the out-of-band budget (commands in
   budget.tf header + runbook), then CI creates the Terraform one.
 - compose stack: emulator healthcheck (bash /dev/tcp TCP probe) +

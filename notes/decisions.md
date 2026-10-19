@@ -121,7 +121,7 @@ Newest last. Each entry: context, decision, why, what was rejected.
   billingbudgets API (note: needs x-goog-user-project header with ADC).
 - Codified in Terraform 2026-10-20 (google_billing_budget.guardrail in
   terraform/budget.tf; was out-of-band REST until then). One-time
-  bootstrap: github-ci needs roles/billing.budgetsWriter on the billing
+  bootstrap: github-ci needs roles/billing.costsManager on the billing
   account (exact commands in budget.tf header).
 
 ## ADR-014: CI identity separate from runtime identity

@@ -56,7 +56,7 @@ emojis, no verbosity. Facts, reasons, commands.
 - Billing: account 013928-968C06-22424A "Admin" (AUD), linked; budget
   "resume-site-guardrail" $5 AUD, alerts 50/90/100%; Terraform-managed
   since 2026-10-20 (terraform/budget.tf; one-time github-ci
-  roles/billing.budgetsWriter bootstrap, see budget.tf header)
+  roles/billing.costsManager bootstrap, see budget.tf header)
 - Terraform state: gs://cloud-resume-challenge-509306-tfstate (versioned,
   public access blocked), prefix terraform/state
 - WIF: pool/provider `github` — provider path

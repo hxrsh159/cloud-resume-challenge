@@ -109,7 +109,7 @@ curl -X PUT -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json
 # ONE-TIME bootstrap (billing-account owner) before CI can manage it:
 gcloud billing accounts add-iam-policy-binding 013928-968C06-22424A \
   --member="serviceAccount:github-ci@cloud-resume-challenge-509306.iam.gserviceaccount.com" \
-  --role="roles/billing.budgetsWriter"
+  --role="roles/billing.costsManager"
 
 # then remove the out-of-band budget so CI creates the managed one:
 gcloud billing budgets list --billing-account=013928-968C06-22424A
