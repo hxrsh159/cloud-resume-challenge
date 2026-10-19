@@ -32,7 +32,10 @@
 # ---------------------------------------------------------------------------
 
 resource "google_billing_budget" "guardrail" {
-  billing_account = "billingAccounts/${var.billing_account_id}"
+  # NOTE: the provider builds the API path as billingAccounts/<id>/...,
+  # so this must be the BARE account id. Passing "billingAccounts/..."
+  # double-prefixes the URL and the API 404s (hit in CI 2026-10-20).
+  billing_account = var.billing_account_id
   display_name    = "resume-site-guardrail"
 
   budget_filter {
