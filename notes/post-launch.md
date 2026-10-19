@@ -154,7 +154,8 @@ the Australian flag + cricket-team gold; remove hero Resume button.
 - Layout: .container 760 -> 1080px; prose caps 72ch (#summary p,
   .showcase-text, .resume-block); body 17px at >=1400px (rem scales).
 - Hero Resume button removed; PDF paths remain nav anchor, resume-
-  section CTA, footer link, terminal command.
+  section CTA, terminal command. (Footer link removed 2026-10-20 on
+  user request; PDF paths: nav anchor, resume section, terminal.)
 - Verified: dark/light screenshots at emulated 1920x940, live DOM
   assertions (accent #FFCD00, bg #0A1633, container 1080, hero button
   absent); pipeline 37430576241 green.
