@@ -12,8 +12,8 @@ Avoid: slow performance. All animation must be transform/opacity only
   name (Inter 700, minimal glow: text-shadow 0 0 10px rgba(255,205,0,.30),
   cricket gold per ADR-023; no glow in light theme), rotating role line
   (Software Engineer / Rust / Cloud & DevOps / Platform Engineering),
-  contact links, four CTAs: GitHub (accent fill), LinkedIn, Email me
-  (border style), Blog.
+  contact links, three CTAs: GitHub (accent fill), Email me + Blog
+  (border style). LinkedIn moved to the Social Me section (ADR-027).
 - Avatar: self-hosted frontend/avatar.jpg (ADR-017; the i.pravatar.cc
   demo placeholder was replaced 2026-09-29).
 - Section labels and job cards unchanged from MASTER.
@@ -81,12 +81,14 @@ Avoid: slow performance. All animation must be transform/opacity only
   full-window screens, including the hero — min-height:
   calc(100svh - 56px), flex-centered content; taller content
   (Experience) simply extends the section. Sections: hero, Summary,
-  Experience, Projects (showcase), Skills, Blog, Resume. Education
+  Experience, Projects (showcase), Skills, Blog, Resume, Social Me.
+  Education
   folded into the Resume section (it is resume content). Footer keeps
   natural height. Sections have scroll-margin-top: 56px so anchor
   navigation clears the fixed nav.
 - Sticky nav (56px): wordmark "Welcome to Harsh's space" left; anchors
-  Summary / Experience / Projects / Skills / Blog / Resume (all in-page) right;
+  Summary / Experience / Projects / Skills / Blog / Resume / Social
+  (all in-page) right;
   theme toggle lives here (removed from hero); ">_" terminal button. 2px
   accent scroll-progress bar under nav. Active anchor gets accent color
   + 2px underline offset. Body gets padding-top 56px. Mobile (<=600px):
@@ -111,3 +113,24 @@ Avoid: slow performance. All animation must be transform/opacity only
 - Blog section (home): latest post card + "all posts" link to /blog/.
 - Resume section (home): one-line pitch, primary download button,
   education list.
+
+## Social Me (added 2026-10-20, ADR-027)
+
+- Final home-page section, after Resume; nav anchor "Social". Full-window
+  like the others.
+- Grid of social-account cards (auto-fit, minmax 230px): Facebook
+  hrsht1, LinkedIn in/harsh159, X @hxrsh159, Reddit u/vhxrry, Pinterest
+  vhxrry, Instagram @that_tallguy_, and the dog account "Miss
+  Whitesocks" @_miss.whitesocks_. GitHub stays in hero/Projects; it is
+  not repeated here.
+- One brand logo per card: inline SVG sprite at the top of <body>
+  (simple-icons path data; LinkedIn from the 11.14.0 release, dropped
+  upstream), referenced by <use>. Fill = --color-muted-foreground,
+  accent gold on hover; the dog card icon is always accent gold. Zero
+  external requests (ADR-017); icons stay subject to each brand's usage
+  guidelines.
+- Card = .job contract: card bg, 1px border, 12px radius; hover =
+  accent border + shadow-md + translateY(-2px), icon goes gold.
+- Copy: intro line + muted closing note ("the gold one is the dog"),
+  no emoji (MASTER anti-pattern). Summary gains a dog-parent/work-ethic
+  paragraph linking to this section.

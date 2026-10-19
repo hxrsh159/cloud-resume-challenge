@@ -41,7 +41,12 @@ emojis, no verbosity. Facts, reasons, commands.
 ## Project facts
 
 - Owner: Harshit Singh, Melbourne — ausharshitsingh@gmail.com
-- LinkedIn: linkedin.com/in/harsh159 — GitHub: github.com/hxrsh159 (since 2015)
+- Socials (site "Social Me" section, ADR-027): LinkedIn
+  linkedin.com/in/harsh159 — GitHub github.com/hxrsh159 (since 2015) —
+  Facebook facebook.com/hrsht1 — X x.com/hxrsh159 — Reddit
+  reddit.com/user/vhxrry — Pinterest au.pinterest.com/vhxrry —
+  Instagram instagram.com/that_tallguy_ — dog Instagram
+  instagram.com/_miss.whitesocks_
 - GitHub repo: github.com/hxrsh159/cloud-resume-challenge (public)
 - GCP project: `cloud-resume-challenge-509306`
 - Domain: `theozdev.com` (Cloudflare registrar, DNS on Cloudflare) — LIVE with managed cert
@@ -79,7 +84,8 @@ avatar, dark/light theme toggle, blog (/blog/), SEO foundations
 (robots/sitemap/og/JSON-LD), creative layer (ADR-019..024): full-page
 reveal constellation, sticky nav + full-window sections, terminal
 easter egg, project showcase, self-hosted resume.pdf, Australian
-flag + cricket-gold palette, 1080px layout, clean URLs. Hardening
+flag + cricket-gold palette, 1080px layout, clean URLs, Social Me
+section (ADR-027). Hardening
 pass 2026-10-20 (ADR-025..026): WIF branch pin, supply-chain
 pinning, budget in Terraform, classify fix, compose healthcheck,
 docs truth sync. Backend test suite: 9 tests.

@@ -413,6 +413,60 @@ h2::after {
   font-size: 0.9rem;
 }
 
+/* --- Social Me (ADR-027; spec: pages/index.md) --- */
+/* Sprite host: never rendered; the <defs> only supply <use> targets. */
+.sr-sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+.social-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: var(--space-md);
+}
+.social-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: var(--space-md) var(--space-lg);
+  color: var(--color-card-foreground);
+  text-decoration: none;
+  transition: border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
+}
+/* Same hover contract as job cards: accent border + shadow + lift. */
+.social-link:hover {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+.social-icon {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  fill: var(--color-muted-foreground);
+  transition: fill 200ms ease;
+}
+.social-link:hover .social-icon { fill: var(--color-accent); }
+/* The dog card: always cricket gold, like her humans' flag. */
+.social-dog .social-icon { fill: var(--color-accent); }
+.social-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.35;
+}
+.social-name { font-weight: 600; font-size: 0.95rem; }
+.social-handle { color: var(--color-muted-foreground); font-size: 0.85rem; }
+
 /* --- Footer --- */
 .site-footer {
   padding: var(--space-xl) 0;

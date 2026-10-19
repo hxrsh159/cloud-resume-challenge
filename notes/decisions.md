@@ -316,3 +316,27 @@ Newest last. Each entry: context, decision, why, what was rejected.
   attack-surface gain. Revisit if the runtime ever needs base-image libs.
 - Upgrade path: bump = change the SHA/version + comment pair in the
   workflow or Dockerfile, then a workflow_dispatch run verifies it.
+
+## ADR-027: Social Me section with self-hosted inline brand SVGs
+
+- Context: user asked for a section listing every social handle
+  (Facebook, LinkedIn, X, Reddit, Pinterest, Instagram, plus the dog's
+  Instagram) with platform logos, and LinkedIn removed from the hero.
+- Decision: new full-window "Social Me" section (nav anchor Social)
+  with a card grid; logos are one inline SVG sprite (simple-icons path
+  data) referenced by <use>, themed via currentColor tokens; the
+  LinkedIn hero button is dropped (LinkedIn lives in Social Me now);
+  hero keeps GitHub/Email/Blog. JSON-LD sameAs extended to every
+  profile. Summary gains a dog-parent/work-ethic paragraph.
+- Why inline SVG sprite over image files, an icon font, or a CDN:
+  zero extra requests (ADR-017 satisfied trivially), theme-aware with
+  the existing palette tokens, same pattern as the showcase diagram,
+  and the 2 KB Instagram path is defined once for both accounts.
+  simple-icons is the standard CC0 source of brand marks (LinkedIn
+  path from release 11.14.0, dropped upstream later); marks remain
+  subject to each brand's usage guidelines.
+- Dog card: same Instagram mark in cricket gold, named "Miss
+  Whitesocks", explained by a muted line under the grid.
+- Rejected: emoji icons (MASTER anti-pattern), icon-font CDNs
+  (third-party hotlink, ADR-017), raster logos (not theme-aware, extra
+  assets to maintain).
