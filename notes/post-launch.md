@@ -192,9 +192,18 @@ Audit findings fixed (issue-by-issue):
 - firestore.tf: deletion_policy flipped to PREVENT (live counter data;
   destroy now fails on purpose).
 - Billing budget codified: terraform/budget.tf (ADR-013 addendum).
-  One-time bootstrap required: grant github-ci roles/billing.costsManager
-  on the billing account, delete the out-of-band budget (commands in
-  budget.tf header + runbook), then CI creates the Terraform one.
+  Bootstrap done 2026-10-20: github-ci granted roles/billing.costsManager
+  on the billing account; out-of-band budget 13d2dec6... deleted after
+  confirming identical config; CI created the Terraform-managed budget
+  efe6a5e8..., verified: 5 AUD, 50/90/100%, project 264595501605.
+- Budget gotchas (both hit live): roles/billing.budgetsWriter does not
+  exist as a grantable role on billing accounts (gcloud: INVALID_ARGUMENT,
+  "not supported for this resource"); the budget-management role is
+  roles/billing.costsManager. And google_billing_budget takes the BARE
+  billing account id: the provider builds its path as
+  billingAccounts/<id>/..., so the prefixed form double-prefixes the
+  URL and the API 404s (runs 39306765687 + 39306767118 red, 39307785472
+  green after the fix).
 - compose stack: emulator healthcheck (bash /dev/tcp TCP probe) +
   depends_on condition service_healthy (first-request race fixed).
 - Frontend fixes: duplicate meta description removed from index.html
@@ -211,4 +220,6 @@ Audit findings fixed (issue-by-issue):
   provider versions now reproducible from the repo); stale pre-Phase-4
   terraform/terraform.tfstate.backup deleted (remote state is canonical).
 - Verified: cargo test 9/9 (CI gate), docker compose up (healthcheck
-  gates API start, counter increments), terraform fmt + validate clean.
+  gates API start, counter increments), terraform fmt + validate clean,
+  all pipelines green, live smoke test (API ok + counter 184, site 200
+  serving exactly one meta description, budget present in billing).

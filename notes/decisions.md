@@ -122,7 +122,8 @@ Newest last. Each entry: context, decision, why, what was rejected.
 - Codified in Terraform 2026-10-20 (google_billing_budget.guardrail in
   terraform/budget.tf; was out-of-band REST until then). One-time
   bootstrap: github-ci needs roles/billing.costsManager on the billing
-  account (exact commands in budget.tf header).
+  account (exact commands in budget.tf header). Done and verified same
+  day: budget re-created by CI, config identical to the REST one.
 
 ## ADR-014: CI identity separate from runtime identity
 
