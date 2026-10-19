@@ -230,10 +230,9 @@ User request: a section listing all social handles with platform
 logos, LinkedIn out of the hero, and a dog-parent/work-ethic line.
 
 - New full-window "Social Me" section (nav anchor Social) after
-  Resume: card grid with Facebook hrsht1, LinkedIn in/harsh159,
-  X @hxrsh159, Reddit u/vhxrry, Pinterest vhxrry, Instagram
-  @that_tallguy_, and the dog account Miss Whitesocks
-  @_miss.whitesocks_.
+  Resume: card grid, in order LinkedIn in/harsh159, Facebook hrsht1,
+  Instagram @that_tallguy_, dog account Miss Whitesocks
+  @_miss.whitesocks_, X @hxrsh159, Pinterest vhxrry, Reddit u/vhxrry.
 - Logos: inline SVG sprite (simple-icons path data; LinkedIn path from
   the 11.14.0 release, dropped upstream) referenced via <use>, themed
   by currentColor tokens; the dog card is always cricket gold. Zero

@@ -118,10 +118,10 @@ Avoid: slow performance. All animation must be transform/opacity only
 
 - Final home-page section, after Resume; nav anchor "Social". Full-window
   like the others.
-- Grid of social-account cards (auto-fit, minmax 230px): Facebook
-  hrsht1, LinkedIn in/harsh159, X @hxrsh159, Reddit u/vhxrry, Pinterest
-  vhxrry, Instagram @that_tallguy_, and the dog account "Miss
-  Whitesocks" @_miss.whitesocks_. GitHub stays in hero/Projects; it is
+- Grid of social-account cards (auto-fit, minmax 230px), in order:
+  LinkedIn in/harsh159, Facebook hrsht1, Instagram @that_tallguy_, the dog
+  account "Miss Whitesocks" @_miss.whitesocks_, X @hxrsh159,
+  Pinterest vhxrry, Reddit u/vhxrry. GitHub stays in hero/Projects; it is
   not repeated here.
 - One brand logo per card: inline SVG sprite at the top of <body>
   (simple-icons path data; LinkedIn from the 11.14.0 release, dropped
