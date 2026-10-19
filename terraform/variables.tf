@@ -19,3 +19,13 @@ variable "image_digest" {
   type        = string
   default     = ""
 }
+
+variable "billing_account_id" {
+  description = "Billing account ID (no billingAccounts/ prefix) that funds the project. Used by the guardrail budget."
+  type        = string
+}
+
+variable "project_number" {
+  description = "Project number (numeric id) of project_id. The billing budget filter wants the numeric form."
+  type        = string
+}

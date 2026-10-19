@@ -104,6 +104,17 @@ curl -X PUT -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json
 
 # budget API note: host is billingbudgets.googleapis.com and ADC needs
 # -H "x-goog-user-project: cloud-resume-challenge-509306"
+
+# budget is now Terraform-managed (terraform/budget.tf, ADR-013).
+# ONE-TIME bootstrap (billing-account owner) before CI can manage it:
+gcloud billing accounts add-iam-policy-binding 013928-968C06-22424A \
+  --member="serviceAccount:github-ci@cloud-resume-challenge-509306.iam.gserviceaccount.com" \
+  --role="roles/billing.budgetsWriter"
+
+# then remove the out-of-band budget so CI creates the managed one:
+gcloud billing budgets list --billing-account=013928-968C06-22424A
+gcloud billing budgets delete <ID> --billing-account=013928-968C06-22424A
+gh workflow run backend.yml -R hxrsh159/cloud-resume-challenge
 ```
 
 ## Phase 4: CI/CD operations
@@ -111,6 +122,7 @@ curl -X PUT -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json
 ```bash
 # repo variables (CLI works; raw REST PUT 404s with our token scopes)
 gh variable set WIF_PROVIDER -b "<provider-path>" -R hxrsh159/cloud-resume-challenge
+gh variable set GCP_REGION -b "us-central1" -R hxrsh159/cloud-resume-challenge
 gh variable list -R hxrsh159/cloud-resume-challenge
 
 # watch / dispatch pipelines
@@ -126,7 +138,7 @@ terraform init -migrate-state   # interactive: answer "yes"
 ## Phase 5: tests + local stack
 
 ```bash
-cd backend && cargo test                 # 8 tests, no GCP needed
+cd backend && cargo test                 # 9 tests, no GCP needed
 podman-compose up --build -d             # or: docker compose up --build
 curl http://localhost:8081/api/visitors  # emulator counter starts at 1
 podman-compose down

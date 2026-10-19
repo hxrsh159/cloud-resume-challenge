@@ -199,14 +199,14 @@ impl CounterStore for DatastoreStore {
 }
 
 /// Datastore signals a transaction conflict either as HTTP 409, or HTTP 400
-/// with status "ABORTED" in the error payload.
+/// with status "ABORTED" in the error payload. FAILED_PRECONDITION is
+/// deliberately NOT retryable: it also fires for structural problems
+/// (stale transaction, bad request state), and retrying those masked the
+/// real error behind three identical failures.
 fn classify(status: reqwest::StatusCode, body: &serde_json::Value) -> StoreError {
     let api_status = body["error"]["status"].as_str().unwrap_or("");
     let msg = body["error"]["message"].as_str().unwrap_or("").to_string();
-    if status == reqwest::StatusCode::CONFLICT
-        || api_status == "ABORTED"
-        || api_status == "FAILED_PRECONDITION"
-    {
+    if status == reqwest::StatusCode::CONFLICT || api_status == "ABORTED" {
         StoreError::Retryable(format!("{status} {api_status}: {msg}"))
     } else {
         StoreError::Fatal(anyhow!("datastore error {status} {api_status}: {msg}"))
@@ -228,6 +228,15 @@ mod tests {
         let body = serde_json::json!({"error": {"status": "ABORTED", "message": "contention"}});
         let err = classify(reqwest::StatusCode::BAD_REQUEST, &body);
         assert!(matches!(err, StoreError::Retryable(_)));
+    }
+
+    #[test]
+    fn failed_precondition_is_fatal_structural_error() {
+        // 409/ABORTED are contention; FAILED_PRECONDITION is structural
+        // (stale tx, bad state) and must surface, not be retried.
+        let body = serde_json::json!({"error": {"status": "FAILED_PRECONDITION", "message": "stale transaction"}});
+        let err = classify(reqwest::StatusCode::BAD_REQUEST, &body);
+        assert!(matches!(err, StoreError::Fatal(_)));
     }
 
     #[test]

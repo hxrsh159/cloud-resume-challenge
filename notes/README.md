@@ -54,14 +54,16 @@ emojis, no verbosity. Facts, reasons, commands.
   (roles/datastore.user only)
 - Project number: 264595501605
 - Billing: account 013928-968C06-22424A "Admin" (AUD), linked; budget
-  "resume-site-guardrail" $5 AUD, alerts 50/90/100%
+  "resume-site-guardrail" $5 AUD, alerts 50/90/100%; Terraform-managed
+  since 2026-10-20 (terraform/budget.tf; one-time github-ci
+  roles/billing.budgetsWriter bootstrap, see budget.tf header)
 - Terraform state: gs://cloud-resume-challenge-509306-tfstate (versioned,
   public access blocked), prefix terraform/state
 - WIF: pool/provider `github` — provider path
   projects/264595501605/locations/global/workloadIdentityPools/github/providers/github
 - CI SA: github-ci@cloud-resume-challenge-509306.iam.gserviceaccount.com
 - GitHub repo variables (NOT secrets): WIF_PROVIDER, WIF_SERVICE_ACCOUNT,
-  GCP_PROJECT_ID
+  GCP_PROJECT_ID, GCP_REGION (used by backend.yml with fallbacks)
 - Pipelines: frontend.yml (firebase deploy), backend.yml (cargo test gate ->
   docker build/push -> terraform apply digest). All runs green.
 - GitHub profile cleanup 2026-09-21: 35 low-impact repos deleted; 5 remain
@@ -76,7 +78,10 @@ avatar, dark/light theme toggle, blog (/blog/), SEO foundations
 (robots/sitemap/og/JSON-LD), creative layer (ADR-019..024): full-page
 reveal constellation, sticky nav + full-window sections, terminal
 easter egg, project showcase, self-hosted resume.pdf, Australian
-flag + cricket-gold palette, 1080px layout, clean URLs.
+flag + cricket-gold palette, 1080px layout, clean URLs. Hardening
+pass 2026-10-20 (ADR-025..026): WIF branch pin, supply-chain
+pinning, budget in Terraform, classify fix, compose healthcheck,
+docs truth sync. Backend test suite: 9 tests.
 
 Maintenance: push to main deploys automatically. New blog post = new
 frontend/blog/<slug>.html + card in blog/index.html + sitemap entry.

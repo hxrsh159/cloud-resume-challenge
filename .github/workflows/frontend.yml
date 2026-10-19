@@ -6,6 +6,12 @@ on:
     paths: ["frontend/**", "firebase.json", ".firebaserc"]
   workflow_dispatch:
 
+# Latest push wins: firebase deploys are idempotent, so an in-flight
+# deploy can be safely canceled by a newer one.
+concurrency:
+  group: frontend-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   id-token: write # required: mints the OIDC token exchanged via WIF
   contents: read
@@ -14,15 +20,18 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      # Pin policy (ADR-026): commit SHA + tag comment; upgrades are
+      # deliberate commits, not tag movements.
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       - id: auth
-        uses: google-github-actions/auth@v2
+        uses: google-github-actions/auth@7b53cdc2a387814ed14eec026287aac689ae8c9b # v2.1.9
         with:
           workload_identity_provider: ${{ vars.WIF_PROVIDER }}
           service_account: ${{ vars.WIF_SERVICE_ACCOUNT }}
 
       # auth@v2 exports GOOGLE_APPLICATION_CREDENTIALS for later steps;
       # firebase-tools picks it up natively. No secrets in this repo.
+      # firebase-tools version pinned (ADR-026): no @latest float.
       - name: Deploy to Firebase Hosting
-        run: npx -y firebase-tools@latest deploy --only hosting --project ${{ vars.GCP_PROJECT_ID }} --non-interactive
+        run: npx -y firebase-tools@15.34.0 deploy --only hosting --project ${{ vars.GCP_PROJECT_ID }} --non-interactive

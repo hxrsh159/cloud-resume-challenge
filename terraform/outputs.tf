@@ -14,7 +14,7 @@ output "dns_records_to_create" {
 }
 
 output "cloud_run_url" {
-  description = "Public URL of the visitor counter API. Referenced by frontend/counter.js."
+  description = "Public URL of the visitor counter API. Hardcoded in frontend/counter.js (terminal.js reads it via window.RESUME_API_URL). If the Cloud Run service is ever recreated, update counter.js and re-deploy the frontend."
   value       = google_cloud_run_v2_service.api.uri
 }
 

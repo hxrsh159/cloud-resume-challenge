@@ -19,6 +19,14 @@ services:
       --no-store-on-disk
     ports:
       - "8085:8085"
+    # Readiness probe: the Java emulator binds 8085 only once it can
+    # serve. bash /dev/tcp is a bare TCP connect, no curl dependency.
+    healthcheck:
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8085"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+      start_period: 10s
 
   api:
     build: ./backend
@@ -28,5 +36,8 @@ services:
       PORT: "8080"
     ports:
       - "8081:8080"
+    # Wait for the emulator to accept connections, not just to exist
+    # (a bare depends_on let first requests race the emulator boot).
     depends_on:
-      - datastore-emulator
+      datastore-emulator:
+        condition: service_healthy

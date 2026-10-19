@@ -56,7 +56,8 @@ SA JSON keys are long-lived secrets that leak (logs, laptops, repos) and
 need rotation. WIF lets GitHub Actions exchange a short-lived OIDC token
 (minted by GitHub, scoped to my repo/branch) for short-lived GCP
 credentials. No secret is stored anywhere; a leaked token expires in
-minutes and only works from my repository.
+minutes and only works from my repository's main branch (ADR-025 pins
+both the repository and the ref).
 
 ## Frontend
 

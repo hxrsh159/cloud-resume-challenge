@@ -119,6 +119,10 @@ Newest last. Each entry: context, decision, why, what was rejected.
   ("Admin", AUD) created in console, linked to project via REST PUT.
 - $5 AUD budget "resume-site-guardrail" with 50/90/100% email alerts —
   billingbudgets API (note: needs x-goog-user-project header with ADC).
+- Codified in Terraform 2026-10-20 (google_billing_budget.guardrail in
+  terraform/budget.tf; was out-of-band REST until then). One-time
+  bootstrap: github-ci needs roles/billing.budgetsWriter on the billing
+  account (exact commands in budget.tf header).
 
 ## ADR-014: CI identity separate from runtime identity
 
@@ -127,6 +131,7 @@ Newest last. Each entry: context, decision, why, what was rejected.
   runtime; compromise of runtime cannot deploy.
 - WIF attribute_condition pins token exchange to the exact repository —
   no other repo (even by the same owner) can impersonate the CI SA.
+  (ADR-025 adds the branch: only refs/heads/main qualifies.)
 
 ## ADR-015: GitHub profile cleanup + profile README
 
@@ -233,7 +238,8 @@ Newest last. Each entry: context, decision, why, what was rejected.
   dots by viewport width tier; link distance 70/60/55px; d_radius
   300/280/250; lineWidth 0.3; dot radius 0-1.5px; velocity ±0.5,
   bounce at edges. Palette stays ours (CSS vars): 4/5 glow-blue dots,
-  1/5 accent pop; links glow-blue.
+  1/5 accent pop; links glow-blue. (Dot colors superseded next day by
+  ADR-023: 3/5 royal, 1/5 gold, 1/5 flag red.)
 - The 48px grid overlay was removed from .aurora — it competed with
   constellation links on a texture level. Aurora blobs stay.
 - Mobile (<=800px): dots only, no links (same as reference tiers).
@@ -277,3 +283,35 @@ Newest last. Each entry: context, decision, why, what was rejected.
 - Trade-off (accepted): section URLs are no longer shareable by copying
   the address bar; deep links into the page keep working when visited
   from outside.
+
+## ADR-025: WIF provider pinned to the default branch
+
+- Context: the pool provider's attribute_condition scoped token exchange
+  to the repository only, so any pushed branch (feature, experiment)
+  could mint a github-ci token and act with CI's project roles.
+- Decision: condition now also requires
+  assertion.ref == 'refs/heads/main'.
+- Why: both workflows only ever run deploys from main; nothing legitimate
+  is lost, and a pushed branch can no longer exchange tokens.
+- Consequence: workflow_dispatch from a non-main ref fails auth by design
+  (dispatch from main only). Fork PRs were already blocked by the
+  repository check; this closes the sibling-branch hole.
+
+## ADR-026: Supply-chain pinning: CI actions and base images by version
+
+- Context: GitHub Actions were pinned by major tag only (@v4, @v2, @v3);
+  a moved/hijacked tag would silently change CI behavior. firebase-tools
+  floated on @latest (frontend.yml) and the Dockerfile built FROM
+  cargo-chef:latest-rust-1, so builds ran whatever shipped that day.
+- Decision: actions pinned to commit SHAs with the tag noted in a
+  comment (checkout v4.4.0, auth v2.1.9, setup-buildx v3.9.0,
+  setup-terraform v3.1.2). frontend.yml uses firebase-tools@15.34.0.
+  Dockerfile builds from cargo-chef:0.1.78-rust-1.99.1.
+- Why: tag/float pinning means "whatever the tag points to today";
+  SHA/version pinning makes every upgrade a reviewable commit.
+- Kept unpinned deliberately: gcr.io/distroless/static-debian12:nonroot.
+  The runtime is a fully static musl binary that uses nothing from the
+  base image, so digest-pinning it would freeze security updates for no
+  attack-surface gain. Revisit if the runtime ever needs base-image libs.
+- Upgrade path: bump = change the SHA/version + comment pair in the
+  workflow or Dockerfile, then a workflow_dispatch run verifies it.

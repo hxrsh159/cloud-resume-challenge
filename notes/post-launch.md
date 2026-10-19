@@ -169,3 +169,46 @@ address bar stays clean on in-page navigation. Incoming deep links
 replaceState after 1.5s. Verified: click nav -> URL unchanged; cold
 load /#skills -> jumps, then URL cleans. Trade-off accepted: address
 bar no longer exposes shareable section URLs.
+
+## 2026-10-20 (hardening pass: security, supply chain, docs truth)
+
+Audit findings fixed (issue-by-issue):
+
+- WIF branch pin (ADR-025): attribute_condition now also requires
+  assertion.ref == 'refs/heads/main'; before, any branch of the repo
+  could mint a CI token.
+- Supply-chain pinning (ADR-026): actions pinned by commit SHA
+  (checkout v4.4.0, auth v2.1.9, buildx v3.9.0, setup-terraform v3.1.2),
+  firebase-tools@15.34.0 (was @latest), Dockerfile cargo-chef
+  0.1.78-rust-1.99.1 (was latest-rust-1). distroless stays unpinned,
+  rationale in ADR-026.
+- backend.yml: concurrency group (GCS state has no locking, applies must
+  queue) + region/project moved to repo variables with fallbacks
+  (GCP_REGION added; was hardcoded in AR_IMAGE and the docker login).
+  frontend.yml: concurrency group (latest push wins).
+- classify() fix: FAILED_PRECONDITION no longer retried (structural
+  error, retrying masked it; 409/ABORTED remain retryable). New test
+  failed_precondition_is_fatal_structural_error; suite now 9.
+- firestore.tf: deletion_policy flipped to PREVENT (live counter data;
+  destroy now fails on purpose).
+- Billing budget codified: terraform/budget.tf (ADR-013 addendum).
+  One-time bootstrap required: grant github-ci roles/billing.budgetsWriter
+  on the billing account, delete the out-of-band budget (commands in
+  budget.tf header + runbook), then CI creates the Terraform one.
+- compose stack: emulator healthcheck (bash /dev/tcp TCP probe) +
+  depends_on condition service_healthy (first-request race fixed).
+- Frontend fixes: duplicate meta description removed from index.html
+  (two different description tags; first won, the richer one lost);
+  API URL single-sourced (counter.js sets window.RESUME_API_URL,
+  terminal.js reads it; was hardcoded in both).
+- Docs truth sync: pages/index.md hero/background sections rewritten to
+  the ADR-023 palette + self-hosted avatar (still described green glow
+  and pravatar), ping added to the terminal command list, hero CTAs
+  corrected to four; outputs.tf cloud_run_url description corrected;
+  ADR-021 dot-color text annotated as superseded by ADR-023; README
+  diagram + WIF bullet updated for the branch pin.
+- Housekeeping: terraform/.terraform.lock.hcl committed (was gitignored;
+  provider versions now reproducible from the repo); stale pre-Phase-4
+  terraform/terraform.tfstate.backup deleted (remote state is canonical).
+- Verified: cargo test 9/9 (CI gate), docker compose up (healthcheck
+  gates API start, counter increments), terraform fmt + validate clean.

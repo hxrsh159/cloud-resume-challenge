@@ -9,21 +9,25 @@ Avoid: slow performance. All animation must be transform/opacity only
 ## Hero banner (new top section, replaces plain header)
 
 - Full-width band above the content column: avatar (round, accent ring),
-  name (Inter 700, minimal glow: text-shadow 0 0 10px rgba(34,197,94,.35)),
-  rotating role line (Software Engineer / Rust / Cloud & DevOps / Platform
-  Engineering), contact links, two CTAs: primary "GitHub" (accent fill),
-  secondary "Email me" (border style).
-- Avatar: demo placeholder (i.pravatar.cc) until a real photo is supplied;
-  swap = replace the `src` in index.html only.
+  name (Inter 700, minimal glow: text-shadow 0 0 10px rgba(255,205,0,.30),
+  cricket gold per ADR-023; no glow in light theme), rotating role line
+  (Software Engineer / Rust / Cloud & DevOps / Platform Engineering),
+  contact links, four CTAs: GitHub (accent fill), LinkedIn, Email me
+  (border style), Blog.
+- Avatar: self-hosted frontend/avatar.jpg (ADR-017; the i.pravatar.cc
+  demo placeholder was replaced 2026-09-29).
 - Section labels and job cards unchanged from MASTER.
 
 ## Background (whole page)
 
-- Two large radial "aurora" blobs (accent green at 12% alpha, deep blue
-  #2563EB at 10% alpha — new secondary glow token `--color-glow-blue`),
-  slow drift animation (40s+), plus a faint static grid overlay
-  (rgba(148,163,184,.05) lines, 48px pitch).
-- Blobs are position:fixed, pointer-events:none, behind content.
+- Two large radial "aurora" blobs: cricket gold rgba(255,205,0,.10) and
+  royal blue rgba(59,107,255,.12) (ADR-023 palette), slow drift animation
+  (44s/52s, alternate). The faint static grid overlay was removed
+  (ADR-021: it competed with constellation links).
+- Blobs are position:fixed, pointer-events:none, behind content
+  (z-index -1; the constellation canvas paints above blobs, below
+  content).
+- Light theme dims blobs to 40% opacity; hero h1 loses its glow.
 
 ## Transitions
 
@@ -93,8 +97,9 @@ Avoid: slow performance. All animation must be transform/opacity only
   4px translate toward pointer, pointer:fine only, transform-only).
 - Terminal overlay: fixed centered panel (max 560px), system monospace,
   opens on ` (backtick) keydown or ">_" click; commands help / whoami /
-  skills / resume (opens PDF) / visitors (live count) / theme / clear /
-  exit; Esc or exit closes; input autofocused; aria-modal dialog.
+  skills / resume (opens PDF) / visitors (live count) / ping (health +
+  latency) / theme / clear / exit; Esc or exit closes; input autofocused;
+  aria-modal dialog.
 - Visitor counter lives in the footer only (ADR-020: hero pill removed —
   the hero tells the story, the footer shows the number).
 - "Resume" naming (ADR-020): the PDF is labeled exactly "Resume"

@@ -4,7 +4,7 @@
 # Flow: GitHub mints a short-lived OIDC token per workflow run -> Google STS
 # exchanges it (pool trust) -> CI service account access token. No JSON key
 # exists anywhere; a stolen run token expires in minutes and only works for
-# assertion.repository == hxrsh159/cloud-resume-challenge.
+# pushes to main of hxrsh159/cloud-resume-challenge (ADR-025).
 # ---------------------------------------------------------------------------
 
 resource "google_project_service" "phase4" {
@@ -29,8 +29,9 @@ resource "google_iam_workload_identity_pool_provider" "github" {
   workload_identity_pool_provider_id = "github"
   display_name                       = "GitHub OIDC"
 
-  # Hard scope: only this repository can ever exchange tokens.
-  attribute_condition = "assertion.repository == 'hxrsh159/cloud-resume-challenge'"
+  # Hard scope (ADR-025): only this repository, only its default branch.
+  # Forks fail the repository check; any non-main ref fails the ref check.
+  attribute_condition = "assertion.repository == 'hxrsh159/cloud-resume-challenge' && assertion.ref == 'refs/heads/main'"
 
   attribute_mapping = {
     "google.subject"       = "assertion.sub"
@@ -59,13 +60,13 @@ resource "google_service_account_iam_member" "ci_wif_binding" {
 # Each maps to resources this config manages. Deliberately NOT roles/editor.
 resource "google_project_iam_member" "ci" {
   for_each = toset([
-    "roles/run.admin",                    # Cloud Run services
-    "roles/artifactregistry.admin",       # AR repos + image push
-    "roles/firebase.admin",               # Firebase Hosting sites + custom domains
-    "roles/datastore.owner",              # Firestore database resource
-    "roles/iam.workloadIdentityPoolAdmin",# WIF pool/provider in state
-    "roles/iam.serviceAccountAdmin",      # service accounts in state
-    "roles/serviceusage.serviceUsageAdmin",# enabled APIs in state
+    "roles/run.admin",                      # Cloud Run services
+    "roles/artifactregistry.admin",         # AR repos + image push
+    "roles/firebase.admin",                 # Firebase Hosting sites + custom domains
+    "roles/datastore.owner",                # Firestore database resource
+    "roles/iam.workloadIdentityPoolAdmin",  # WIF pool/provider in state
+    "roles/iam.serviceAccountAdmin",        # service accounts in state
+    "roles/serviceusage.serviceUsageAdmin", # enabled APIs in state
   ])
   project = var.project_id
   role    = each.value

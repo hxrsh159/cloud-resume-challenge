@@ -1,5 +1,9 @@
 // Visitor counter — Cloud Run REST API (see terraform/backend.tf).
+// Single source of truth for the API URL: terminal.js reads the
+// window.RESUME_API_URL global set here (counter.js always loads first
+// on every page that has the terminal).
 const API_URL = "https://resume-api-ykjegodhwq-uc.a.run.app";
+window.RESUME_API_URL = API_URL;
 
 // ADR-018: don't count crawlers/automation. Each view costs a Firestore
 // write; bots see the placeholder, humans get the live count.

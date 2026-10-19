@@ -15,7 +15,8 @@
   var history = [];
   var hIdx = -1;
 
-  var API_URL = "https://resume-api-ykjegodhwq-uc.a.run.app";
+  // Set by counter.js, which loads first on every page with a terminal.
+  var API_URL = window.RESUME_API_URL;
 
   function print(text, cls) {
     var div = document.createElement("div");

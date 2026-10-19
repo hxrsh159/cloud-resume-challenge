@@ -6,21 +6,34 @@ on:
     paths: ["backend/**", "terraform/**"]
   workflow_dispatch:
 
+# terraform apply must never run concurrently (GCS backend has no state
+# locking): queue pushes, never cancel an in-flight apply.
+concurrency:
+  group: backend-${{ github.ref }}
+  cancel-in-progress: false
+
 permissions:
   id-token: write
   contents: read
 
+# Region/project live in GitHub repo variables (`gh variable set`, see
+# notes/runbook.md) so a region change is one variable, not a workflow
+# edit; fallbacks keep bootstrap-ability. Region must match
+# terraform/terraform.tfvars.
 env:
-  AR_IMAGE: us-central1-docker.pkg.dev/cloud-resume-challenge-509306/resume-api/resume-api
+  AR_REGION: ${{ vars.GCP_REGION || 'us-central1' }}
+  AR_IMAGE: ${{ vars.GCP_REGION || 'us-central1' }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID || 'cloud-resume-challenge-509306' }}/resume-api/resume-api
 
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      # Pin policy (ADR-026): commit SHA + tag comment; upgrades are
+      # deliberate commits, not tag movements.
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       - id: auth
-        uses: google-github-actions/auth@v2
+        uses: google-github-actions/auth@7b53cdc2a387814ed14eec026287aac689ae8c9b # v2.1.9
         with:
           workload_identity_provider: ${{ vars.WIF_PROVIDER }}
           service_account: ${{ vars.WIF_SERVICE_ACCOUNT }}
@@ -30,10 +43,10 @@ jobs:
         working-directory: backend
         run: cargo test --locked
 
-      - uses: docker/setup-buildx-action@v3
+      - uses: docker/setup-buildx-action@f7ce87c1d6bead3e36075b2ce75da1f6cc28aaca # v3.9.0
 
       - name: Docker login to Artifact Registry
-        run: echo "${{ steps.auth.outputs.access_token }}" | docker login -u oauth2accesstoken --password-stdin https://us-central1-docker.pkg.dev
+        run: echo "${{ steps.auth.outputs.access_token }}" | docker login -u oauth2accesstoken --password-stdin https://${AR_REGION}-docker.pkg.dev
 
       - name: Build and push
         working-directory: backend
@@ -47,7 +60,7 @@ jobs:
           DIGEST=$(docker buildx imagetools inspect $AR_IMAGE:latest --format '{{.Manifest.Digest}}')
           echo "digest=$DIGEST" >> "$GITHUB_OUTPUT"
 
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
 
       - name: Terraform apply (deploy new revision)
         working-directory: terraform

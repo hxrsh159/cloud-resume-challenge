@@ -21,8 +21,10 @@ resource "google_firestore_database" "default" {
   location_id = var.region
   type        = "DATASTORE_MODE"
 
-  # Protect the irreversible: prevent accidental deletion of the database.
-  deletion_policy = "DELETE" # Phase 2 default; flip to "PREVENT" once live data matters
+  # Protect the irreversible: the counter entity is live data now
+  # (flipped from the Phase 2 "DELETE" default, 2026-10-20). terraform
+  # destroy fails until this is deliberately set back to "DELETE".
+  deletion_policy = "PREVENT"
 
   depends_on = [google_project_service.firestore_deps]
 }

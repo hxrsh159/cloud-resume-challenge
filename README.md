@@ -20,7 +20,7 @@ zero-trust CI/CD pipeline.
                                          ▼
                           ┌────────────────────────────────────────────┐
                           │  Workload Identity Federation (GCP STS)    │
-                          │  condition: repository == this repo        │
+                          │  condition: repository + ref == main       │
                           │  impersonates: github-ci SA (no JSON keys) │
                           └──────────────┬─────────────────────────────┘
                                          │ short-lived access token
@@ -66,8 +66,9 @@ The reasoning behind every significant choice is recorded as ADRs in
   re-pushing `:latest` silently creates no new revision. CI resolves the
   pushed digest and passes it to Terraform (ADR-009).
 - **Workload Identity Federation** — no service-account JSON key exists in
-  any secret store. GitHub's OIDC token is exchanged for a repo-scoped,
-  minutes-lived credential (ADR in notes, workflows in `.github/workflows/`).
+  any secret store. GitHub's OIDC token is exchanged for a repo- and
+  branch-scoped, minutes-lived credential (ADR-025; workflows in
+  `.github/workflows/`).
 - **Trait-seamed backend** — the handler depends on `CounterStore`, so unit
   tests mock storage and the compose stack swaps in the Datastore emulator
   via one env var (`DATASTORE_EMULATOR_HOST`).
@@ -89,7 +90,7 @@ notes/             architecture, ADRs, interview Q&A, runbook
 # infrastructure
 cd terraform && terraform init && terraform plan && terraform apply
 
-# backend: unit tests (8) — mock store, no GCP needed
+# backend: unit tests (9): mock store, no GCP needed
 cd backend && cargo test
 
 # backend: full local stack against the Datastore emulator

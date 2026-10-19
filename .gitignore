@@ -3,7 +3,8 @@ terraform/.terraform/
 terraform/*.tfstate
 terraform/*.tfstate.*
 terraform/tfplan
-.terraform.lock.hcl
+# note: terraform/.terraform.lock.hcl IS committed (reproducible
+# provider versions); state files above stay ignored
 
 # Rust build artifacts
 target/

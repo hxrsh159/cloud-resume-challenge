@@ -3,7 +3,9 @@
 # ---------------------------------------------------------------------------
 # Stage 1: cargo-chef base — toolchain + dependency-caching utility
 # ---------------------------------------------------------------------------
-FROM docker.io/lukemathwalker/cargo-chef:latest-rust-1 AS chef
+# Version-pinned (ADR-026): cargo-chef 0.1.78 on Rust 1.99.1; bumping is
+# a deliberate commit, not a floating tag.
+FROM docker.io/lukemathwalker/cargo-chef:0.1.78-rust-1.99.1 AS chef
 WORKDIR /app
 
 # ---------------------------------------------------------------------------
